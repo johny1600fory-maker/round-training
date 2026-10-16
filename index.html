@@ -169,6 +169,142 @@ exercise('cooldown','Спокойная ходьба и дыхание','cool','
  'Замедляй шаг. Расслабь руки, восстанови дыхание.',
  'Резкая остановка после плотного интервала; болезненная растяжка.','Просто спокойная ходьба.','Заминку не нужно усложнять.');
 
+/* v3 additions: indexed primary evidence only; no methodological approval.
+   All doses below are application-authored templates, not source prescriptions. */
+Object.assign(SOURCES, {
+  nhsStrength:{name:'NHS · силовые упражнения (индексированный текст)',url:'https://www.nhs.uk/live-well/exercise/strength-exercises/'},
+  aceIncline:{name:'ACE · Be a Chest Day Champion (индекс; live-страница недоступна)',url:'https://www.acefitness.org/resources/pros/expert-articles/8972/be-a-chest-day-champion-an-evidence-based-approach-to-training-the-chest/'},
+  mayoModifiedPlank:{name:'Mayo Clinic · Modified plank (индексированный текст)',url:'https://www.mayoclinic.org/healthy-lifestyle/fitness/in-depth/core-strength/art-20546851?p=1&s=6'},
+  aceSideLunge:{name:'ACE · Side Lunge (индексированный текст)',url:'https://www.acefitness.org/resources/everyone/exercise-library/50/side-lunge/'}
+});
+const MANUAL_TEMPLATE_NOTE = 'Доза — шаблон приложения, не персональное назначение источника. При боли остановись.';
+exercise('wall-pushup','Отжимания от стены','strength','push',[],'reps',6,3,false,null,
+ ['Поставь ладони на стену на уровне груди, стопы устойчиво.','Сгибай локти, приближая грудь к стене; корпус держи ровно. Плавно оттолкнись.',MANUAL_TEMPLATE_NOTE],
+ 'Ровный корпус, спокойное движение.','Прогиб поясницы; рывок головой.','Встань ближе к стене.','Сохраняй контроль на чуть большем расстоянии.','nhsStrength');
+exercise('incline-pushup','Отжимания от высокой опоры','strength','push',[],'reps',6,3,false,null,
+ ['Проверь: высокая опора устойчива и не скользит. Ладони на опоре, корпус ровный.','Подконтрольно приблизь грудь к опоре и оттолкнись без рывка. Не разводи локти строго в стороны.',MANUAL_TEMPLATE_NOTE],
+ 'Опора неподвижна; не провисай.','Сдвигающаяся опора; прогиб; отталкивание рывком.','Выбери отжимания от стены.','Сначала повторяй с ровной техникой; без взрывных отжиманий.','aceIncline');
+exercise('knee-plank','Планка с колен','core','core',[],'time',15,1,false,null,
+ ['Обопрись на предплечья и колени; плечи над локтями.','Держи голову и шею на линии корпуса, спокойно дыши. Заверши удержание при потере положения.',MANUAL_TEMPLATE_NOTE],
+ 'Плечи над локтями, дыхание свободное.','Задержка дыхания; провисание поясницы.','Сократи удержание.','Сначала сохрани положение без лишних движений.','mayoModifiedPlank');
+exercise('calf-raise','Подъёмы на носки с опорой','strength','squat',[],'reps',8,3,false,null,
+ ['Встань у устойчивой опоры, придерживайся руками.','Медленно подними обе пятки и плавно опусти их. Не раскачивайся.',MANUAL_TEMPLATE_NOTE],
+ 'Обе пятки движутся спокойно.','Пружинящие рывки; потеря равновесия.','Уменьши высоту подъёма.','Сохраняй плавное опускание без ускорения.','nhsStrength');
+exercise('side-lunge','Выпад в сторону','strength','lunge',[],'reps',6,3,true,null,
+ ['Освободи место сбоку. Шагни в сторону, отводя таз назад над рабочей ногой.','Пятки остаются на полу, колено направлено вслед за стопой. Вернись без рывка.','Здесь все повторы в одну сторону, затем в другую.',MANUAL_TEMPLATE_NOTE],
+ 'Таз назад; колено следует за стопой.','Слишком широкий шаг; колено внутрь; пружинящие движения.','Сделай шаг меньше.','Сначала добейся одинакового контроля с обеих сторон.','aceSideLunge');
+exercise('warmup-box','Подготовка к боксу','warm','warm',[],'time',120,1,false,null,
+ ['Спокойно шагай, мягко двигай плечами и кистями.','Перейди в знакомую стойку; выполняй короткие шаги, не скрещивая ноги. Без ударных серий и ускорений.',MANUAL_TEMPLATE_NOTE],
+ 'Только знакомые движения; не утомляйся.','Резкие движения; скрещивание ног.','Шагай на месте медленнее.','Разминку не нужно усложнять.','author');
+exercise('warmup-strength','Подготовка к силовой работе','warm','warm',[],'time',120,1,false,null,
+ ['Спокойно шагай, мягко двигай плечами и голеностопами.','Чередуй знакомые неглубокие приседания и отведение таза назад без веса. Амплитуда комфортная.',MANUAL_TEMPLATE_NOTE],
+ 'Без веса и рывков; подготовка, не дополнительный подход.','Резкое увеличение глубины; попытка утомиться.','Уменьши амплитуду.','Разминку не нужно усложнять.','author');
+
+/* Trusted builtin intent, not medical clearance. Never derive this layer from
+   imported EX fields or .meta. Optional easier variants in prose do not make
+   external support mandatory for the authored baseline movement. */
+const CATALOG_FAMILIES = Object.freeze({
+  warmup:'Разминка', rope:'Скакалка', shadow:'Бой с тенью', footwork:'Шаги в стойке',
+  'horizontal-press':'Горизонтальный жим', 'overhead-press':'Жим над головой',
+  squat:'Присед', 'split-squat':'Сплит-присед', lunge:'Выпад',
+  'calf-raise':'Подъём на носки', 'lateral-lunge':'Выпад в сторону',
+  'loaded-hinge':'Тяга с тазовым наклоном', row:'Тяга к поясу', curl:'Сгибание локтя',
+  'suitcase-hold':'Одностороннее удержание', crunch:'Скручивание',
+  deadbug:'Разгибание диагонали лёжа', plank:'Передняя планка',
+  sideplank:'Боковая планка', birddog:'Диагональ на четвереньках',
+  bridge:'Ягодичный мост', 'arm-cycle':'Вращение рукояток',
+  stepping:'Шаг на месте', cooldown:'Заминка'
+});
+const CATALOG_TRUSTED = (() => {
+  const table = Object.create(null);
+  const add = (ids, family, role, focus, level=1, options={}) => {
+    ids.split(' ').forEach(id => {
+      const m = {family,role,focus:focus.split(' '),selection:'auto',
+        reason:'Авторское базовое движение; выбор не подтверждает технику или медицинскую готовность.',
+        level,requiresSupport:null,impact:'low',space:'small',manualReason:null,easier:[],harder:[],...options};
+      m.focus = Object.freeze([...m.focus]);
+      m.easier = Object.freeze([...(options.easier || [])]);
+      m.harder = Object.freeze([...(options.harder || [])]);
+      table[id] = Object.freeze(m);
+    });
+  };
+  add('mobility','warmup','warmup','full');
+  add('rope-basic','rope','rope','full legs',1,{impact:'jump',space:'clear',harder:['rope-boxer','rope-step']});
+  add('rope-boxer rope-step','rope','rope','full legs',2,{impact:'jump',space:'clear',easier:['rope-basic']});
+  add('box-base','shadow','boxing','full shoulders',1,{space:'clear',harder:['box-double']});
+  add('box-double box-defense box-exit box-tempo box-body','shadow','boxing','full shoulders',2,{space:'clear',easier:['box-base']});
+  add('box-counter box-flow','shadow','boxing','full shoulders',3,{selection:'manual',space:'clear',easier:['box-base'],reason:'Сложная координация; прежние выполнения сохраняются, автоматическое назначение исключено.',manualReason:'Нет методического допуска сложного бокса в базовый план. Отметка знакомства не заменяет проверку техники.'});
+  add('footwork','footwork','footwork','legs',1,{space:'clear'});
+  add('pushup','horizontal-press','strength','full shoulders',1,{harder:['pushup-tempo']});
+  add('pushup-tempo','horizontal-press','strength','full shoulders',2,{easier:['pushup']});
+  add('db-floor','horizontal-press','strength','full shoulders');
+  add('db-press','overhead-press','strength','shoulders',2);
+  add('squat','squat','strength','legs',1,{harder:['goblet']});
+  add('goblet','squat','strength','legs',2,{easier:['squat']});
+  add('split','split-squat','strength','legs',2);
+  add('reverse-lunge','lunge','strength','legs',2);
+  add('kb-deadlift db-rdl','loaded-hinge','strength','legs back',2);
+  add('db-row db-single-row','row','strength','back',2);
+  add('kb-row','row','strength','back',2,{easier:['db-single-row']});
+  add('hammer','curl','accessory','full');
+  add('suitcase','suitcase-hold','strength','core',2);
+  add('crunch','crunch','core','core');
+  add('deadbug','deadbug','core','core');
+  add('plank','plank','core','core');
+  add('sideplank','sideplank','core','core',2);
+  add('birddog','birddog','core','core');
+  add('bridge','bridge','strength','legs');
+  add('burn','arm-cycle','conditioning','shoulders',1,{harder:['burn-pace']});
+  add('burn-pace','arm-cycle','conditioning','shoulders',2,{easier:['burn']});
+  add('fastfeet','stepping','conditioning','full legs',1,{selection:'fallback',reason:'Без скакалки: отдельный вариант шагов, не эквивалент прыжкового раунда.'});
+  add('cooldown','cooldown','cooldown','full');
+  const manual = {selection:'manual',reason:'Новая авторская карточка; доза приложения не является персональным назначением первоисточника.',manualReason:'Методическая проверка не проведена; только осознанный ручной выбор. Знакомство не даёт автоматического допуска.'};
+  add('wall-pushup','horizontal-press','strength','full shoulders',1,{...manual,requiresSupport:'wall',harder:['incline-pushup']});
+  add('incline-pushup','horizontal-press','strength','full shoulders',1,{...manual,requiresSupport:'stable',easier:['wall-pushup']});
+  add('knee-plank','plank','core','core',1,{...manual,harder:['plank']});
+  add('calf-raise','calf-raise','strength','legs',1,{...manual,requiresSupport:'stable'});
+  add('side-lunge','lateral-lunge','strength','legs',2,{...manual,space:'clear'});
+  add('warmup-box','warmup','warmup','full shoulders',1,{...manual,space:'clear'});
+  add('warmup-strength','warmup','warmup','full legs',1,{...manual});
+  return Object.freeze(table);
+})();
+const CATALOG_UNKNOWN = Object.freeze({
+  family:'unknown',role:'manual',focus:Object.freeze(['full']),selection:'manual',
+  reason:'Нет доверенной встроенной классификации; только ручной выбор.',
+  level:1,requiresSupport:null,impact:'low',space:'small',manualReason:'Нет доверенной классификации.',
+  easier:Object.freeze([]),harder:Object.freeze([])
+});
+function catalogMeta(idOrEx) {
+  let id = idOrEx;
+  if (idOrEx && typeof idOrEx === 'object') {
+    if (!Object.prototype.hasOwnProperty.call(idOrEx,'id') || idOrEx.custom === true) return CATALOG_UNKNOWN;
+    id = idOrEx.id;
+  }
+  return typeof id === 'string' && Object.prototype.hasOwnProperty.call(CATALOG_TRUSTED,id)
+    ? CATALOG_TRUSTED[id] : CATALOG_UNKNOWN;
+}
+function catalogCanAuto(id, profile={}) {
+  const m = catalogMeta(id);
+  if (m.selection === 'manual') return false;
+  profile = profile || {};
+  const contains = (values, value) => Array.isArray(values) ? values.includes(value)
+    : !!(values && typeof values.has === 'function' && values.has(value));
+  const key = typeof id === 'string' ? id : id.id;
+  if (contains(profile.excluded,key)) return false;
+  if (m.requiresSupport && (!profile.supports || profile.supports[m.requiresSupport] !== true)) return false;
+  if (profile.avoidImpact === true && m.impact === 'jump') return false;
+  if (profile.spaceClear === false && m.space === 'clear') return false;
+  // Missing familiarity is not a retroactive exclusion of baseline exercises.
+  if (profile.experience === 'beginner' && m.level === 3 && !contains(profile.familiar,key)) return false;
+  return true;
+}
+function catalogCanReplace(oldId,newId) {
+  const oldMeta = catalogMeta(oldId), newMeta = catalogMeta(newId);
+  // Family compatibility only: the caller still checks gear, profile and dose.
+  return oldMeta !== CATALOG_UNKNOWN && newMeta !== CATALOG_UNKNOWN
+    && oldMeta.family === newMeta.family && oldMeta.role === newMeta.role;
+}
+
 /* Pure planning engine: finite templates, movement-pattern constraints, real
    transition/rest accounting, no external API or random exercise soup. */
 const TYPES={mix:'Бокс + сила',boxing:'Бокс и техника',strength:'Силовая',endurance:'Выносливость'};
@@ -202,7 +338,7 @@ function compile(plan,registry=EX){
     for(let si=0;si<sides.length;si++){
      if(si)addRest(10,'Смена стороны',b.title,{transition:true});
      const seconds=estimateEntry(it,registry);
-     list.push({kind:b.kind,mode:it.mode,seconds,estimate:seconds,reps:it.mode==='reps'?it.value:0,ex:ex.id,title:ex.name,cue:ex.cue,side:sides[si],tag:ex.tag,block:b.title,blockId:b.id,set:set+1,sets:b.sets,
+     list.push({kind:b.kind,mode:it.mode,seconds,estimate:seconds,reps:it.mode==='reps'?it.value:0,ex:ex.id,role:catalogMeta(ex).role,family:catalogMeta(ex).family,title:ex.name,cue:ex.cue,side:sides[si],tag:ex.tag,block:b.title,blockId:b.id,set:set+1,sets:b.sets,
       round:b.kind==='boxing'?ei+1:null,rounds:b.kind==='boxing'?b.entries.length:null,info:b.kind==='boxing'?`Раунд ${ei+1} из ${b.entries.length}`:`${b.sets>1?`Круг ${set+1} из ${b.sets}`:''}${sides[si]?' · '+sides[si]:''}`.replace(/^ · /,'')});
     }
     if(ei<b.entries.length-1)addRest(b.gap,b.kind==='boxing'?'Отдых между раундами':'Отдых / переход',b.title,{boxingRest:b.kind==='boxing'});
@@ -214,77 +350,103 @@ function compile(plan,registry=EX){
 }
 function duration(plan,registry=EX){return compile(plan,registry).reduce((a,s)=>a+s.estimate,0);}
 function blockDuration(b){return duration({blocks:[b]})-5;}
-function counts(plan){const s=compile(plan);return{push:s.filter(x=>x.tag==='push').reduce((a,x)=>a+x.reps,0),squat:s.filter(x=>x.tag==='squat').reduce((a,x)=>a+x.reps,0),abs:s.filter(x=>x.tag==='abs').reduce((a,x)=>a+x.reps,0),rounds:s.filter(x=>x.kind==='boxing'&&x.mode!=='rest'&&x.ex).length,rope:s.filter(x=>x.kind==='rope'&&x.ex).reduce((a,x)=>a+x.seconds,0),work:s.filter(x=>!['rest','prep'].includes(x.kind)).reduce((a,x)=>a+x.estimate,0),rest:s.filter(x=>['rest','prep'].includes(x.kind)).reduce((a,x)=>a+x.estimate,0)};}
-function generate(raw,seed=Date.now()){
- const cfg=normalizeConfig(raw),rng=prng(seed),profile=EFFORT[cfg.effort],notes=[];
- if(cfg.must.rope&&!cfg.gear.includes('rope'))return {error:'В обязательных блоках есть скакалка, но в инвентаре она выключена. Включи её или сними обязательный блок.',config:cfg};
- const choose=(ids,fallback)=>{const pool=ids.filter(id=>canUse(EX[id],cfg));return pool.length?pool[Math.floor(rng()*pool.length)]:fallback;};
- const pair1 = [choose(['kb-deadlift','db-rdl'],'bridge'),choose(cfg.focus==='back'?['kb-row','db-single-row','db-row']:['db-row','kb-row'],'birddog')];
- let pair2;
- if(cfg.focus==='shoulders')pair2=[cfg.must.quota?choose(['db-row','db-single-row'],'birddog'):choose(['db-press','db-floor'],'pushup'),choose(['suitcase'],'sideplank')];
- else if(cfg.focus==='back')pair2=[choose(['kb-row','db-row'],'birddog'),choose(['suitcase'],'sideplank')];
- else if(cfg.focus==='legs')pair2=[choose(['split','reverse-lunge'],'split'),choose(cfg.must.quota?['db-rdl','kb-deadlift']:['goblet','squat'],'bridge')];
- else if(cfg.focus==='core')pair2=['deadbug',choose(['suitcase'],'sideplank')];
- else pair2=[choose(cfg.must.quota?['split','reverse-lunge']:['goblet','split','reverse-lunge'],'split'),cfg.must.quota?choose(['suitcase'],'sideplank'):choose(['pushup','db-floor'],'pushup')];
- // Bodyweight-only alternatives still alternate movement patterns, not invented pulling exercises.
- if(!cfg.gear.includes('kb')&&!cfg.gear.includes('db'))notes.push('Без гири и гантелей нет полноценной тяги для спины: упражнения на корпус не считаются её равноценной заменой.');
- const adjust=(id)=>{const x=entry(id);if(x.mode==='reps'){
-  if(['pushup','pushup-tempo'].includes(id))x.value=id==='pushup'?({1:6,2:8,3:8}[cfg.effort]):5;
-  else if(id==='crunch')x.value=20;
-  else x.value=Math.max(6,Math.round(x.value*({1:.8,2:1,3:1.1}[cfg.effort])));
- } else if(id==='suitcase'||id==='sideplank')x.value=cfg.effort===1?20:cfg.effort===3?35:30;return x;};
- const allBox=Object.keys(EX).filter(id=>id.startsWith('box-'));
- let boxPool=['box-base','box-defense','box-flow',...allBox.filter(id=>!['box-base','box-defense','box-flow'].includes(id)).sort(()=>rng()-.5)];
- if(cfg.effort===1)boxPool=boxPool.filter(id=>id!=='box-tempo');
- if(cfg.focus==='legs')boxPool=['box-exit','box-base','box-defense',...boxPool];
- if(cfg.focus==='shoulders')boxPool=['box-base','box-double','box-flow',...boxPool];
- let rounds=cfg.must.shadow?3:cfg.type==='boxing'?3:['mix','endurance'].includes(cfg.type)?2:0;
- const p={version:2,seed,config:cfg,title:TYPES[cfg.type],created:new Date().toISOString(),notes,edited:false,blocks:[]};
- p.blocks.push(block('warm','Подготовка суставов','warm',[entry('mobility')],1,0,0));
- if(cfg.must.rope)p.blocks.push(block('rope','Скакалка · 10 минут','rope',[entry('rope-basic',{value:180}),entry('rope-boxer',{value:120}),entry('rope-step',{value:120}),entry('rope-basic',{value:180})],1,0,0));
- else if(cfg.gear.includes('rope'))p.blocks.push(block('rope','Скакалка · разогрев','rope',[entry('rope-basic',{value:180})],1,0,0));
- else p.blocks.push(block('warm-legs','Разогрев ног','warm',[entry('footwork',{value:90})],1,0,0));
- if(rounds)p.blocks.push(block('boxing','Бой с тенью · 3 / 1','boxing',Array.from({length:rounds},(_,i)=>entry(boxPool[i%boxPool.length],{value:180})),1,0,60));
- if(cfg.must.quota)p.blocks.push({...block('quota','База · 50 + 50','strength',[entry('squat',{value:10}),entry('pushup',{value:10})],5,cfg.effort===1?90:60,20),locked:true});
- if(cfg.must.abs)p.blocks.push(block('core','Пресс','core',[entry('crunch',{value:20})],3,cfg.effort===1?45:cfg.effort===3?30:40,15));
- p.blocks.push(block('cool','Восстановить дыхание','cool',[entry('cooldown')],1,0,0));
- const min=duration(p),limit=cfg.minutes*60;
- if(min>limit)return{error:`Обязательные блоки занимают примерно ${Math.ceil(min/60)} мин с отдыхом. В ${cfg.minutes} мин они не помещаются: увеличь время или отключи один из обязательных блоков.`,minimum:min,config:cfg};
- function place(b){let before=p.blocks.findIndex(x=>['core','finish','cool'].includes(x.id));if(b.id==='finish')before=p.blocks.findIndex(x=>x.id==='cool');p.blocks.splice(before<0?p.blocks.length:before,0,b);}
- function proposal(action){const old=clone(p.blocks);action();if(duration(p)<=limit)return true;p.blocks=old;return false;}
- const makeA=()=>block('strength-a',cfg.focus==='back'?'Спина · тяга и задняя цепь':'Силовой блок A · тяга', 'strength',pair1.map(adjust),2,profile.rest,profile.gap);
- const makeB=()=>block('strength-b','Силовой блок B · '+FOCUS[cfg.focus].toLowerCase(),'strength',pair2.map(adjust),2,profile.rest,profile.gap);
- const makeFinish=()=>block('finish',cfg.gear.includes('burn')?'Финишер · Burn Machine и ноги':'Финишер · ритм и ноги','conditioning',[
-  entry(cfg.gear.includes('burn')?(cfg.effort===3?'burn-pace':'burn'):'fastfeet',{value:profile.burn}),entry('footwork',{value:60})],2,cfg.effort===1?60:45,15);
- const get=id=>p.blocks.find(b=>b.id===id);
- const addA=()=>{if(!get('strength-a'))return proposal(()=>place(makeA()));return false;};
- const addB=()=>{if(!get('strength-b'))return proposal(()=>place(makeB()));return false;};
- const addFin=()=>{if(!get('finish'))return proposal(()=>place(makeFinish()));return false;};
- const bump=(id,max)=>{const b=get(id);return b&&b.sets<max?proposal(()=>b.sets++):false;};
- const addRound=()=>{const b=get('boxing');if(!b||b.entries.length>=(cfg.type==='boxing'?12:cfg.type==='strength'?3:8))return false;return proposal(()=>b.entries.push(entry(boxPool[b.entries.length%boxPool.length],{value:180})));};
- const addCore=()=>{if(get('core'))return false;return proposal(()=>place(block('core','Корпус · контроль', 'core',[adjust(choose(['deadbug','sideplank','plank'],'plank'))],2,40,15)));};
- const priorities={
-  mix:[addA,addFin,addB,()=>bump('strength-a',3),addRound,()=>bump('strength-b',3),addCore,()=>bump('finish',3),addRound],
-  boxing:[addRound,addRound,addRound,addFin,addCore,addRound,addRound,addA,()=>bump('finish',3)],
-  strength:[addA,addB,()=>bump('strength-a',3),()=>bump('strength-b',3),addCore,addFin,()=>bump('strength-a',4),()=>bump('strength-b',4)],
-  endurance:[addFin,addRound,addA,()=>bump('finish',3),addRound,addB,addCore,()=>bump('strength-a',3),addRound]
- };
- for(const action of priorities[cfg.type])action();
- // Fill only with coherent, bounded blocks. A shorter session is preferable to junk volume.
- for(let i=0;i<6;i++){
-  let added=false;
-  if(cfg.type!=='strength')added=addRound();
-  if(!added&&cfg.type!=='boxing')added=bump('strength-a',4);
-  if(!added)added=bump('strength-b',cfg.type==='boxing'?2:3);
-  if(!added)added=addCore();
-  if(!added)break;
+function counts(plan){const s=compile(plan);return{push:s.filter(x=>x.tag==='push').reduce((a,x)=>a+x.reps,0),squat:s.filter(x=>x.tag==='squat').reduce((a,x)=>a+x.reps,0),abs:s.filter(x=>x.tag==='abs').reduce((a,x)=>a+x.reps,0),rounds:s.filter(x=>x.family==='shadow'&&x.ex).length,rope:s.filter(x=>x.role==='rope'&&x.ex).reduce((a,x)=>a+x.seconds,0),work:s.filter(x=>!['rest','prep'].includes(x.kind)).reduce((a,x)=>a+x.estimate,0),rest:s.filter(x=>['rest','prep'].includes(x.kind)).reduce((a,x)=>a+x.estimate,0)};}
+/* Constraints are filtered before objectives; variety is only a tie-breaker. */
+function generate(raw,seed=Date.now(),context={}){
+ const cfg=normalizeConfig(raw),rng=prng(seed),profile=context?.profile||{},eff=EFFORT[cfg.effort],notes=[],conflicts=[];
+ const all=Object.keys(EX).filter(id=>!EX[id].custom&&catalogMeta(EX[id]).selection!=='manual');
+ const allowed=id=>canUse(EX[id],cfg)&&catalogCanAuto(EX[id],profile);
+ const pool=all.filter(allowed),meta=id=>catalogMeta(EX[id]);
+ const recent=new Set();
+ for(const h of (Array.isArray(context?.history)?context.history:[]).slice(0,3)){
+  if(h?.detailsKnown===false)continue;
+  for(const s of (Array.isArray(h?.steps)?h.steps:[]))if(s?.ex&&!['skipped','pending'].includes(s.status))recent.add(s.ex);
  }
- const remain=limit-duration(p);
- if(remain>240)notes.push(`Получилось примерно ${Math.round(duration(p)/60)} мин вместо ${cfg.minutes}: не заполняю остаток случайной нагрузкой. Можно добавить блок вручную.`);
- if(cfg.type==='strength'&&cfg.must.quota)notes.push('50 отжиманий уже включены: дополнительные жимы автоматически ограничены, а основная силовая часть делает акцент на тяге и ногах.');
- if(cfg.type==='strength')notes.push('С доступными весами это домашняя силовая и силовая выносливость, а не тренировка максимальной силы.');
- if(cfg.effort===3)notes.push('Тяжёлый режим — не гонка за пульсом. Снизь темп или добавь отдых, если исчезают чистые повторения.');
- p.estimated=duration(p);return p;
+ const previous=new Set((context?.previousPlan?.blocks||[]).flatMap(b=>(b.entries||[]).map(e=>e.ex)));
+ const rank=ids=>ids.map(id=>({id,score:(previous.has(id)?4:0)+(recent.has(id)?1:0),tie:rng()})).sort((a,b)=>a.score-b.score||a.tie-b.tie).map(x=>x.id);
+ const family=f=>pool.filter(id=>meta(id).family===f);
+ const issues=id=>{
+  const e=EX[id],m=meta(id),out=[];
+  if(!canUse(e,cfg))out.push('gear');
+  if(Array.isArray(profile.excluded)&&profile.excluded.includes(id))out.push('excluded');
+  if(m.requiresSupport&&profile.supports?.[m.requiresSupport]!==true)out.push('support');
+  if(profile.avoidImpact&&m.impact==='jump')out.push('impact');
+  if(profile.spaceClear===false&&m.space==='clear')out.push('space');
+  if(!catalogCanAuto(e,profile)&&!out.length)out.push('eligibility');
+  return out;
+ };
+ const requirePool=(label,ids)=>{
+  const eligible=ids.filter(allowed);
+  if(!eligible.length){const codes=[...new Set(ids.flatMap(issues))];for(const code of codes.length?codes:['unavailable'])conflicts.push({code,requirement:label,exercises:ids,reason:`Обязательный блок «${label}» недоступен: ${code}.`});}
+  return rank(eligible);
+ };
+ const ropes=cfg.must.rope?requirePool('rope',all.filter(id=>meta(id).role==='rope')):rank(family('rope'));
+ const shadows=cfg.must.shadow?requirePool('shadow',all.filter(id=>meta(id).family==='shadow')):rank(family('shadow'));
+ if(cfg.must.quota){requirePool('push50',['pushup']);requirePool('squat50',['squat']);}
+ if(cfg.must.abs)requirePool('crunch60',['crunch']);
+ // Warm-up/cooldown are never replaced with an excluded movement.
+ const warms=requirePool('warmup',all.filter(id=>meta(id).role==='warmup'));
+ const cools=requirePool('cooldown',all.filter(id=>meta(id).role==='cooldown'));
+ if(conflicts.length)return{error:conflicts.map(x=>x.reason).join(' '),minimum:null,conflicts,notes,config:cfg};
+ const p={version:2,seed,config:cfg,title:TYPES[cfg.type],created:new Date().toISOString(),notes,edited:false,blocks:[]};
+ p.blocks.push(block('warm','Подготовка суставов','warm',[entry(warms[0])],1,0,0));
+ if(cfg.must.rope)p.blocks.push(block('rope','Скакалка · 10 минут','rope',[180,120,120,180].map((v,i)=>entry(ropes[i%ropes.length],{value:v})),1,0,0));
+ if(cfg.must.shadow)p.blocks.push(block('boxing','Бой с тенью · 3 / 1','boxing',Array.from({length:3},(_,i)=>entry(shadows[i%shadows.length],{value:180})),1,0,60));
+ if(cfg.must.quota)p.blocks.push({...block('quota','База · 50 + 50','strength',[entry('squat',{value:10}),entry('pushup',{value:10})],5,cfg.effort===1?90:60,20),locked:true});
+ if(cfg.must.abs)p.blocks.push(block('core','Пресс · 60','core',[entry('crunch',{value:20})],3,cfg.effort===1?45:cfg.effort===3?30:40,15));
+ p.blocks.push(block('cool','Восстановить дыхание','cool',[entry(cools[0])],1,0,0));
+ const minimum=duration(p),limit=cfg.minutes*60;
+ if(minimum>limit){const reason=`Обязательные блоки с подготовкой, отдыхом и переходами занимают ${Math.ceil(minimum/60)} мин; бюджет ${cfg.minutes} мин.`;return{error:reason,minimum,conflicts:[{code:'time-budget',reason}],notes,config:cfg};}
+ const optional=pool.filter(id=>!(cfg.must.quota&&['push','squat'].includes(EX[id].tag))&&!(cfg.must.abs&&EX[id].tag==='abs')&&!(cfg.must.rope&&meta(id).role==='rope'));
+ const used=()=>new Set(p.blocks.flatMap(b=>b.entries.map(e=>e.ex)));
+ const dose=id=>{const e=EX[id],factor={1:.75,2:1,3:1.15}[cfg.effort];return entry(id,{value:Math.max(e.mode==='reps'?5:15,Math.round(e.value*factor))});};
+ const insert=b=>{let at=p.blocks.findIndex(x=>['core','cool'].includes(x.id));if(b.id==='finish')at=p.blocks.findIndex(x=>x.id==='cool');p.blocks.splice(at<0?p.blocks.length:at,0,b);};
+ const tryBlock=b=>{const before=p.blocks.slice();insert(b);if(duration(p)<=limit)return true;p.blocks=before;return false;};
+ let serial=0;
+ function addMovement(candidates,label,kind='strength'){
+  const families=new Set([...used()].map(id=>meta(id).family));
+  const order=rank(candidates.filter(id=>optional.includes(id)&&!used().has(id)&&!families.has(meta(id).family)));
+  // Prefer a meaningful bounded dose; one complete set is allowed when tight.
+  for(const sets of (cfg.effort===1?[2,1]:cfg.effort===3?[3,2,1]:[2,1]))for(const id of order){
+   const b=block('optional-'+serial,label,kind,[dose(id)],sets,eff.rest,eff.gap);
+   if(tryBlock(b)){serial++;return true;}
+  }
+  // A short complete set (not partial unilateral work) can preserve the focus.
+  for(const id of order){if(EX[id].mode!=='reps')continue;const item=dose(id);if(item.value<=10)continue;item.value=10;
+   if(tryBlock(block('optional-'+serial,label,kind,[item],1,eff.rest,eff.gap))){serial++;return true;}
+  }
+  return false;
+ }
+ const focusPool=()=>optional.filter(id=>cfg.focus==='back'?meta(id).family==='row':cfg.focus==='full'?['row','loaded-hinge','horizontal-press','split-squat','bridge'].includes(meta(id).family):meta(id).focus.includes(cfg.focus)&&['strength','core','accessory'].includes(meta(id).role));
+ const focusAdded=addMovement(focusPool(),'Акцент · '+FOCUS[cfg.focus],cfg.focus==='core'?'core':'strength');
+ const strength=()=>addMovement(optional.filter(id=>['strength','accessory'].includes(meta(id).role)),'Силовая работа');
+ const core=()=>addMovement(optional.filter(id=>meta(id).role==='core'),'Корпус · контроль','core');
+ const conditioning=()=>addMovement(optional.filter(id=>['conditioning','footwork','rope'].includes(meta(id).role)),'Выносливость','conditioning');
+ const round=()=>{
+  if(!shadows.length)return false;
+  let b=p.blocks.find(b=>b.id==='boxing');
+  if(b){if(b.entries.length>=({boxing:8,mix:4,endurance:5,strength:3}[cfg.type]))return false;const before=b.entries.slice();const ordered=rank(shadows.filter(id=>!used().has(id)));b.entries.push(entry(ordered[0]||shadows[b.entries.length%shadows.length],{value:180}));if(duration(p)<=limit)return true;b.entries=before;return false;}
+  return tryBlock(block('boxing','Бой с тенью · 3 / 1','boxing',[entry(shadows[0],{value:180})],1,0,60));
+ };
+ const actions={mix:[strength,round,conditioning,core,strength],boxing:[round,round,round,round,core,conditioning],strength:[strength,strength,core,strength],endurance:[conditioning,round,conditioning,round,core,conditioning]};
+ let typeAdded=false;for(const action of actions[cfg.type])if(action())typeAdded=true;
+ const finalIds=used(),rows=[...finalIds].filter(id=>meta(id).family==='row');
+ const achieved=cfg.focus==='back'?rows.length>0:focusAdded;
+ notes.push(achieved?`Акцент «${FOCUS[cfg.focus]}»: включена отдельная целевая работа${cfg.focus==='back'?' — тяга к поясу':''}.`:`Акцент «${FOCUS[cfg.focus]}» не реализован отдельным блоком: ${focusPool().length?'ограничен бюджетом обязательств':'нет доступного целевого движения'}.`);
+ if(cfg.focus==='back'&&!rows.length)notes.push('Нет полноценной тяги для спины; сгибания рук и работа на корпус не являются её заменой.');
+ const hasRole=role=>[...finalIds].some(id=>meta(id).role===role);
+ const typeMet=cfg.type==='boxing'?hasRole('boxing'):cfg.type==='endurance'?hasRole('conditioning')||hasRole('rope'):cfg.type==='strength'?focusAdded||p.blocks.some(b=>b.id.startsWith('optional-')&&b.kind==='strength'):hasRole('boxing')&&p.blocks.some(b=>b.id.startsWith('optional-')&&b.kind==='strength');
+ notes.push(typeMet&&typeAdded?`Тип «${TYPES[cfg.type]}»: приоритет отражён в дополнительных блоках.`:`Тип «${TYPES[cfg.type]}» ограничен обязательствами, доступными движениями и временем; полный приоритет не обеспечен.`);
+ const dosed=p.blocks.filter(b=>b.id.startsWith('optional-'));
+ notes.push(dosed.length?`Усилие «${eff.name}»: дополнительные блоки — ${dosed.map(b=>`${b.sets} × ${b.entries[0].value} ${b.entries[0].mode==='reps'?'повт.':'с'}`).join('; ')}, отдых между подходами ${eff.rest} с. Обязательные количества сохранены; RPE не гарантируется.`:`Усилие «${eff.name}»: дополнительная дозировка ограничена; выполнен только доступный состав. Обязательные количества сохранены; RPE не гарантируется.`);
+ if(context?.previousPlan){const old=[...previous].sort().join('|'),now=[...finalIds].sort().join('|');notes.push(old===now?'Другой вариант: свободы сменить допустимый состав в этом бюджете не найдено; повторение сохранено.':'Другой вариант: изменён допустимый состав упражнений; обязательства сохранены.');}
+ if(recent.size)notes.push('Недавние упражнения учитывались только после ограничений, целевого семейства и выполнимой дозировки.');
+ if(limit-duration(p)>240)notes.push('План короче выбранного времени: остаток не заполнен случайной нагрузкой.');
+ p.estimated=duration(p);p.minimum=minimum;return p;
+}
+function preflight(raw,context={}){
+ const p=generate(raw,1,context);
+ return{ok:!p.error,minimum:p.minimum??null,conflicts:p.conflicts||[],notes:p.notes||[],config:p.config};
 }
 function validPlan(value,registry=EX){
  if(!value||typeof value!=='object'||!Array.isArray(value.blocks)||value.blocks.length>24||value.blocks.length<1)return null;
@@ -300,31 +462,237 @@ function validPlan(value,registry=EX){
 }
 
 'use strict';
+/* Pure v3 data boundary. Invalid supplied data throws TypeError; callers must
+   prepare the complete import before committing it. Bounds below are storage
+   limits, not exercise prescriptions. Missing legacy details stay unknown. */
+function defaultProfile(){
+ return {goal:'general',experience:'unknown',familiar:[],excluded:[],supports:{wall:false,stable:false},spaceClear:false,avoidImpact:false,weights:{kb:12,db:5,burn:2.5}};
+}
+function roundStateAssert(ok,field){if(!ok)throw new TypeError('Invalid '+field);}
+function roundStateObject(x,field){roundStateAssert(x!==null&&typeof x==='object'&&!Array.isArray(x)&&Object.prototype.toString.call(x)==='[object Object]',field);}
+function roundStateNumber(x,min,max,field,integer=false){roundStateAssert(typeof x==='number'&&Number.isFinite(x)&&x>=min&&x<=max&&(!integer||Number.isInteger(x)),field);return x;}
+function roundStateOwn(x,k){return Object.hasOwn(x,k)?x[k]:undefined;}
+function roundStateId(id,registry){roundStateAssert(typeof id==='string'&&/^[a-zA-Z0-9_-]{1,80}$/.test(id)&&!['__proto__','constructor','prototype'].includes(id)&&Object.hasOwn(registry,id),'exercise ID');return id;}
+function normalizeProfile(raw,registry=EX){
+ const out=defaultProfile();if(raw===undefined)return out;roundStateObject(raw,'profile');
+ for(const [k,allowed] of [['goal',['general','boxing','strength','endurance']],['experience',['unknown','beginner','regular']]]){const v=roundStateOwn(raw,k);if(v!==undefined){roundStateAssert(allowed.includes(v),k);out[k]=v;}}
+ for(const k of ['familiar','excluded']){const v=roundStateOwn(raw,k);if(v!==undefined){roundStateAssert(Array.isArray(v)&&v.length<=600,k);out[k]=[...new Set(Array.from(v,id=>roundStateId(id,registry)))];}}
+ for(const k of ['spaceClear','avoidImpact']){const v=roundStateOwn(raw,k);if(v!==undefined){roundStateAssert(typeof v==='boolean',k);out[k]=v;}}
+ for(const k of ['supports','weights']){const v=roundStateOwn(raw,k);if(v===undefined)continue;roundStateObject(v,k);for(const name of Object.keys(v))roundStateAssert(Object.hasOwn(out[k],name),k+'.'+name);for(const name of Object.keys(out[k])){const n=roundStateOwn(v,name);if(n===undefined)continue;if(k==='supports')roundStateAssert(typeof n==='boolean',k+'.'+name);else roundStateNumber(n,0,200,k+'.'+name);out[k][name]=n;}}
+ return out;
+}
+function normalizeStepResults(rows,registry=EX){
+ roundStateObject(registry,'registry');roundStateAssert(Array.isArray(rows)&&rows.length<=600,'steps');const seen=new Set();
+ return Array.from(rows,row=>{
+  roundStateObject(row,'step');for(const k of ['index','ex','blockId','kind','side','mode','set','target','status','actualReps','actualSeconds'])roundStateAssert(Object.hasOwn(row,k),'step.'+k);
+  const index=roundStateNumber(row.index,0,599,'index',true);roundStateAssert(!seen.has(index),'duplicate index');seen.add(index);
+  const ex=roundStateId(row.ex,registry);roundStateAssert(typeof row.blockId==='string'&&/^[a-zA-Z0-9_-]{1,40}$/.test(row.blockId)&&!['__proto__','constructor','prototype'].includes(row.blockId),'blockId');
+  roundStateAssert(['warm','rope','boxing','strength','core','conditioning','cool'].includes(row.kind),'kind');
+  roundStateAssert(['','левая сторона','правая сторона'].includes(row.side),'side');
+  roundStateAssert(['time','reps'].includes(row.mode),'mode');roundStateAssert(['done','skipped'].includes(row.status),'status');
+  roundStateNumber(row.set,1,8,'set',true);roundStateNumber(row.target,1,row.mode==='time'?900:100,'target');
+  if(row.actualReps!==null)roundStateNumber(row.actualReps,0,1000,'actualReps',true);
+  if(row.actualSeconds!==null)roundStateNumber(row.actualSeconds,0,86400,'actualSeconds');
+  roundStateAssert(row.mode==='reps'||row.actualReps===null,'time actualReps');
+  roundStateAssert(row.status!=='skipped'||row.actualReps===null,'skipped actualReps');
+  return {index,ex,blockId:row.blockId,kind:row.kind,side:row.side,mode:row.mode,set:row.set,target:row.target,status:row.status,actualReps:row.actualReps,actualSeconds:row.actualSeconds};
+ });
+}
+function collectSessionResults(session,registry=EX){
+ roundStateObject(session,'session');roundStateAssert(Array.isArray(session.steps)&&session.steps.length<=600,'session.steps');roundStateObject(session.logs,'session.logs');const rows=[];
+ // logStep stores {status,reps,elapsed}; elapsed is measured on every mode.
+ // Skipped reps=0 is a logger sentinel, not evidence of zero repetitions.
+ for(const key of Object.keys(session.logs)){
+  roundStateAssert(/^(0|[1-9][0-9]*)$/.test(key),'log index');const index=Number(key);roundStateNumber(index,0,599,'log index',true);roundStateAssert(Object.hasOwn(session.steps,index),'log step');
+  const step=session.steps[index],log=session.logs[key];roundStateObject(step,'session step');roundStateObject(log,'log');
+  for(const k of ['status','reps','elapsed'])roundStateAssert(Object.hasOwn(log,k),'log.'+k);
+  roundStateAssert(['done','skipped'].includes(log.status),'log status');roundStateNumber(log.reps,0,1000,'log reps',true);roundStateNumber(log.elapsed,0,86400,'log elapsed');
+  if(['prep','rest'].includes(step.kind)){roundStateAssert(step.mode==='time'&&!step.ex,'non-exercise step');continue;}
+  rows.push({index,ex:step.ex,blockId:step.blockId,kind:step.kind,side:step.side,mode:step.mode,set:step.set,target:step.mode==='reps'?step.reps:step.seconds,status:log.status,actualReps:step.mode==='reps'&&log.status==='done'?log.reps:null,actualSeconds:log.elapsed});
+ }
+ return normalizeStepResults(rows,registry);
+}
+function normalizeHistoryDetails(historyEntry,registry=EX){
+ roundStateObject(historyEntry,'history');const known=roundStateOwn(historyEntry,'detailsKnown'),rawSteps=roundStateOwn(historyEntry,'steps');
+ if(known!==undefined)roundStateAssert(typeof known==='boolean','detailsKnown');
+ const steps=rawSteps===undefined?[]:normalizeStepResults(rawSteps,registry);
+ roundStateAssert(known!==true||rawSteps!==undefined,'missing known steps');roundStateAssert(known!==false||steps.length===0,'unknown steps contradiction');
+ const detailsKnown=known===undefined?rawSteps!==undefined:known;
+ const reason=roundStateOwn(historyEntry,'stopReason'),stopReason=reason===undefined?'unknown':reason;
+ roundStateAssert(['unknown','time','difficulty','unfamiliar','pain','other'].includes(stopReason),'stopReason');
+ const v=roundStateOwn(historyEntry,'catalogVersion'),catalogVersion=v===undefined?null:v;
+ roundStateAssert(catalogVersion===null||(typeof catalogVersion==='string'&&/^[a-zA-Z0-9._-]{1,64}$/.test(catalogVersion))||(Number.isSafeInteger(catalogVersion)&&catalogVersion>=1),'catalogVersion');
+ return {detailsKnown,steps,stopReason,catalogVersion};
+}
+
+'use strict';
+/* Offline proposal boundary. No acceptance, persistence, DOM or load progression.
+   Structural validPlan alone is NOT a constraint validator. */
+function roundRecValid(raw){return raw&&typeof raw==='object'?validPlan({...raw,created:raw.created||'1970-01-01T00:00:00.000Z'}):null;}
+function roundRecConfigEqual(a,b){return !!a&&!!b&&['minutes','effort','type','focus'].every(k=>a[k]===b[k])&&Array.isArray(a.gear)&&Array.isArray(b.gear)&&JSON.stringify([...a.gear].sort())===JSON.stringify([...b.gear].sort())&&['rope','shadow','quota','abs'].every(k=>typeof a.must?.[k]==='boolean'&&a.must[k]===b.must?.[k]);}
+function roundRecAudit(raw,context={}){
+ const unmet=[],warnings=[];let plan,profile;
+ const fail=(code,message)=>unmet.push({code,message});
+ try{profile=normalizeProfile(context.profile);plan=roundRecValid(raw);}catch(e){fail('invalid',e.message);}
+ if(!plan){if(!unmet.length)fail('invalid','План не прошёл проверку структуры.');return {plan:null,unmet,warnings,steps:[],profile};}
+ // Reject normalization that could silently repair a dose or hard configuration.
+ if(!roundRecConfigEqual(normalizeConfig(raw.config),raw.config))fail('config','Конфигурация неполная или требует нормализации; сначала подтвердите её явно.');
+ for(let i=0;i<plan.blocks.length;i++){const b=plan.blocks[i],old=raw.blocks[i];if(['sets','rest','gap'].some(k=>b[k]!==old[k]))fail('dose','Дозировка блока требует исправления: '+b.id);}
+ const ids=plan.blocks.map(b=>b.id);if(new Set(ids).size!==ids.length)fail('block-id','Идентификаторы блоков должны быть уникальны.');
+ const steps=compile(plan),cfg=plan.config,c=counts(plan),limit=cfg.minutes*60;
+ if(!Number.isFinite(plan.estimated)||plan.estimated>limit)fail('time-budget',`План ${plan.estimated} с; бюджет ${limit} с. Обязательства не отключены.`);
+ const exact=(key,got,target)=>{if(got!==target)fail('quota-'+key,`${key}: фактически в плане ${got}, требуется ровно ${target}; ${got<target?'не хватает '+(target-got):'превышение '+(got-target)}.`);};
+ if(cfg.must.quota){exact('push',c.push,50);exact('squat',c.squat,50);}
+ if(cfg.must.abs)exact('abs',c.abs,60);
+ if(cfg.must.rope)exact('rope',c.rope,600);
+ if(cfg.must.shadow){
+  const shadow=steps.filter(s=>s.ex&&s.family==='shadow');
+  if(shadow.length<3)fail('quota-shadow',`Бой с тенью: ${shadow.length} раундов; требуется не менее 3.`);
+  if(shadow.some(s=>s.mode!=='time'||s.seconds!==180))fail('shadow-duration','Каждый обязательный раунд боя с тенью должен длиться 180 с.');
+  for(let i=0;i<shadow.length-1;i++){
+   const from=steps.indexOf(shadow[i]),to=steps.indexOf(shadow[i+1]),between=steps.slice(from+1,to);
+   if(between.some(s=>s.ex)||between.reduce((n,s)=>n+s.seconds,0)!==60)fail('shadow-rest','Между обязательными раундами боя с тенью требуется 60 с отдыха.');
+  }
+ }
+ const seen=new Set();
+ for(const s of steps.filter(s=>s.ex)){if(seen.has(s.ex))continue;seen.add(s.ex);const ex=EX[s.ex],m=catalogMeta(ex);
+  const issue=(code,text)=>{fail(code,text);warnings.push(text);};
+  if(!canUse(ex,cfg))issue('gear','Нет выбранного инвентаря: '+ex.name);
+  if(profile?.excluded.includes(s.ex))issue('excluded','Исключённое упражнение: '+ex.name);
+  if(m.requiresSupport&&profile?.supports[m.requiresSupport]!==true)issue('support','Не подтверждена опора '+m.requiresSupport+': '+ex.name);
+  if(profile?.avoidImpact&&m.impact==='jump')issue('impact','Прыжковая нагрузка при ограничении ударной нагрузки: '+ex.name);
+  if(profile?.spaceClear!==true&&m.space==='clear')issue('space','Не подтверждено свободное пространство: '+ex.name);
+  if(m.selection==='manual')issue('unverified','Нет доверенной классификации для автоматического предложения: '+ex.name);
+  else if(profile&&!catalogCanAuto(ex,profile)&&!unmet.some(u=>u.message.includes(ex.name)))issue('eligibility','Не подтверждены условия выбора: '+ex.name);
+  if(s.mode!==ex.mode)issue('mode','Режим не совпадает с каталогом: '+ex.name);
+ }
+ return {plan,unmet,warnings,steps,profile};
+}
+// Display-only vocabulary: internal evidence/action codes remain unchanged.
+function roundRecReasonRu(code){return ({pain:'боль',time:'не хватило времени',difficulty:'трудность выполнения',unknown:'не указана',unfamiliar:'незнакомое упражнение',completed:'занятие завершено'})[code]||'не указана';}
+function roundRecBlockReason(b,ss,cfg,edited){
+ const parts=[],known=ss.filter(s=>catalogMeta(EX[s.ex]).family!=='unknown'),roles=new Set(known.map(s=>s.role));
+ const valid=known.filter(s=>s.mode===EX[s.ex].mode),has=f=>valid.some(s=>s.family===f);
+ if(roles.has('warmup'))parts.push('Разминка: подготовительная часть занятия.');
+ if(roles.has('cooldown'))parts.push('Заминка: завершение занятия.');
+ if(has('rope'))parts.push(cfg.must.rope?'Скакалка: вклад в обязательные 600 с; точный итог проверяется по всему плану.':'Скакалка: дополнительная работа, обязательство отключено.');
+ if(has('shadow'))parts.push(cfg.must.shadow?'Бой с тенью: вклад в обязательные раунды; число, длительность и отдых проверяются по всему плану.':'Бой с тенью: дополнительная боксёрская часть, обязательство отключено.');
+ for(const [tag,flag,label,target] of [['push','quota','отжимания',50],['squat','quota','приседания',50],['abs','abs','пресс',60]]){
+  const n=valid.filter(s=>s.tag===tag&&s.mode==='reps').reduce((sum,s)=>sum+s.reps,0);
+  if(n)parts.push(cfg.must[flag]?`Вклад в обязательные ${label}: ${n} из ${target} повт. по плану; общий итог — в проверке обязательств.`:`${label[0].toUpperCase()+label.slice(1)}: дополнительная работа (${n} повт.).`);
+ }
+ if(roles.has('strength'))parts.push(['strength','mix'].includes(cfg.type)?`Силовая часть выбранного типа «${TYPES[cfg.type]}».`:'Силовая часть фактического состава.');
+ if(roles.has('boxing'))parts.push(['boxing','mix'].includes(cfg.type)?`Боксёрская часть выбранного типа «${TYPES[cfg.type]}».`:'Боксёрская часть фактического состава.');
+ if(roles.has('footwork'))parts.push('Работа ног в боксёрской части; не заменяет раунды боя с тенью.');
+ if(roles.has('core'))parts.push('Работа мышц корпуса.');
+ if(roles.has('accessory'))parts.push('Дополнительное упражнение для рук; не заменяет тягу для спины.');
+ if(roles.has('conditioning'))parts.push(cfg.type==='endurance'?'Работа на время в выбранном типе «Выносливость».':'Дополнительная работа на время.');
+ const focused=known.some(s=>{const m=catalogMeta(EX[s.ex]);return cfg.focus==='back'?m.family==='row':['strength','core','accessory'].includes(m.role)&&m.focus.includes(cfg.focus);});
+ if(focused)parts.push(`${cfg.focus==='back'?'Тяга: ':''}акцент «${FOCUS[cfg.focus]}» представлен фактическими упражнениями.`);
+ const gear=[...new Set(ss.flatMap(s=>EX[s.ex].gear))],selected=gear.filter(g=>cfg.gear.includes(g)),missing=gear.filter(g=>!cfg.gear.includes(g));
+ const gearName=g=>({rope:'скакалка',kb:'гиря',db:'гантели',burn:'ручной тренажёр'})[g]||'другой инвентарь';
+ if(selected.length)parts.push('Выбранный инвентарь: '+selected.map(gearName).join(', ')+'.');
+ if(missing.length)parts.push('Не выбран необходимый инвентарь: '+missing.map(gearName).join(', ')+'.');
+ if(!gear.length)parts.push('Без инвентаря.');
+ if(known.length!==ss.length)parts.push('Нет доверенной классификации части упражнений; причина выбора неизвестна.');
+ if(ss.some(s=>catalogMeta(EX[s.ex]).selection==='manual'))parts.push('Только ручной выбор; автоматический допуск и проверка техники не подтверждены.');
+ if(edited)parts.push('Описан изменённый состав, не история выбора.');
+ return parts.join(' ');
+}
+function planExplanation(plan,context={}){
+ const a=roundRecAudit(plan,context),out={summary:[],blocks:[],unmet:a.unmet.slice(),changes:[],warnings:a.warnings.slice()};if(!a.plan)return out;
+ const p=a.plan,steps=a.steps,work=steps.filter(s=>s.ex),focus=p.config.focus;
+ const targeted=work.filter(s=>{const m=catalogMeta(EX[s.ex]);return focus==='back'?m.family==='row':['strength','core','accessory'].includes(m.role)&&m.focus.includes(focus);});
+ out.summary.push(`План: ${Math.floor(p.estimated/60)} мин ${p.estimated%60} с (${p.estimated} с) из бюджета ${p.config.minutes} мин (${p.config.minutes*60} с); работа, отдых и переходы учтены.`);
+ if(targeted.length)out.summary.push(`Акцент «${FOCUS[focus]}»: ${focus==='back'?'полноценная тяга — ':''}${[...new Set(targeted.map(s=>EX[s.ex].name))].join(', ')}.`);
+ else out.unmet.push({code:'focus',message:`Акцент «${FOCUS[focus]}» не достигнут составом плана${focus==='back'?': нет тяги; сгибания рук и упражнения корпуса её не заменяют':''}. Причина выбора этого состава не установлена.`});
+ for(const b of p.blocks){const ss=work.filter(s=>s.blockId===b.id);out.blocks.push({id:b.id,title:[...new Set(ss.map(s=>EX[s.ex].name))].join(' + '),reason:roundRecBlockReason(b,ss,p.config,p.edited)});}
+ if(context.previousPlan){const prev=roundRecValid(context.previousPlan);if(prev){for(const b of prev.blocks)if(!p.blocks.some(n=>n.id===b.id))out.changes.push('Удалён блок: '+b.id);for(const b of p.blocks){const old=prev.blocks.find(n=>n.id===b.id);if(!old)out.changes.push('Добавлен блок: '+b.id);else if(JSON.stringify([old.entries,old.sets,old.rest,old.gap,old.kind])!==JSON.stringify([b.entries,b.sets,b.rest,b.gap,b.kind]))out.changes.push('Изменён состав или дозировка: '+b.id);}if(JSON.stringify(prev.config)!==JSON.stringify(p.config))out.changes.push('Изменена конфигурация плана.');if(!out.changes.length)out.changes.push('Состав и дозировка не изменились.');}}
+ out.warnings.push(...out.unmet.filter(u=>!out.warnings.includes(u.message)).map(u=>u.message));
+ return out;
+}
+function roundRecFacts(h){
+ try{const d=normalizeHistoryDetails(h),p=roundRecValid(h.plan);if(!d.detailsKnown||!d.steps.length||!p)return {known:false,reason:d.stopReason};
+ const expected=compile(p).map((s,index)=>({...s,index})).filter(s=>s.ex);
+ const matches=d.steps.every(r=>{const s=expected.find(s=>s.index===r.index);return s&&['ex','blockId','kind','side','mode','set'].every(k=>s[k]===r[k])&&r.target===(s.mode==='reps'?s.reps:s.seconds);});
+ const complete=matches&&expected.length===d.steps.length&&d.steps.every(r=>r.status==='done'&&(r.mode==='reps'?r.actualReps!==null&&r.actualReps>=r.target:r.actualSeconds!==null&&r.actualSeconds>=r.target));
+ return {partial:matches&&h.detailsKnown===true&&h.complete===false&&d.steps.length<expected.length&&['time','difficulty'].includes(d.stopReason),recorded:d.steps.length,known:matches&&expected.length===d.steps.length,reason:d.stopReason,complete,done:d.steps.filter(r=>r.status==='done').length,total:expected.length,plan:p,rpe:typeof h.rpe==='number'&&Number.isFinite(h.rpe)&&h.rpe>=1&&h.rpe<=10?h.rpe:null};
+ }catch(e){return {known:false,reason:h?.stopReason==='pain'?'pain':'unknown'};}
+}
+function roundRecSameScheme(a,b){return JSON.stringify(a.blocks.map(x=>[x.id,x.kind,x.entries,x.sets,x.rest,x.gap]))===JSON.stringify(b.blocks.map(x=>[x.id,x.kind,x.entries,x.sets,x.rest,x.gap]));}
+function nextRecommendations(history,context={}){
+ const h=Array.isArray(history)?history[0]:null,f=h?roundRecFacts(h):{known:false,reason:'unknown'};
+ if(f.reason==='pain')return [{id:'stop-review',kind:'stop',title:'Остановиться и пересмотреть занятие',why:'Указана боль как причина остановки. Новый план и замены не предлагаются.',evidence:[`Причина остановки: ${roundRecReasonRu('pain')}`],action:{type:'review',reason:'pain'}}];
+ const out=[],source=context.currentPlan||h?.plan,ctx={profile:context.profile,history},evidence=f.partial?[`Отмечено ${f.recorded} из ${f.total} этапов; остальной результат не отмечен. Выполнение или пропуск не предполагаются.`,`Причина остановки: ${roundRecReasonRu(f.reason)}.`]:f.known?[`Отмечено выполненными ${f.done} из ${f.total}; полное выполнение целей: ${f.complete?'да':'нет'}.`,`Причина остановки: ${roundRecReasonRu(f.reason)}.`,f.rpe===null?'Оценка RPE неизвестна; готовность не предполагается.':`RPE: ${f.rpe}; отдельно не основание повышать нагрузку.`]:['Фактические результаты отсутствуют, неполны или не совпадают с планом; план не считается выполненной работой.'];
+ if((!f.known&&!f.partial)||(!f.complete&&f.reason==='unknown'))out.push({id:'ask-facts',kind:'unknown',title:'Уточнить результаты прошлого занятия',why:'Недостаточно данных для изменения дозировки.',evidence,action:{type:'ask-facts',fields:['stopReason','rpe']}});
+ if(source&&context.config&&!roundRecConfigEqual(normalizeConfig(context.config),source.config)){out.push({id:'review-config',kind:'review',title:'Согласовать текущие настройки и схему',why:'Текущая конфигурация отличается от сохранённого плана; обязательства не будут переключены автоматически.',evidence,action:{type:'review'}});return out;}
+ if(source){const action={type:'repeat',plan:clone(source)},rec={id:'repeat',kind:'repeat',title:'Повторить схему без повышения нагрузки',why:f.known&&f.complete?'Фактические цели отмечены выполненными. Повтор не означает готовность к увеличению нагрузки.':'Осознанный повтор после проверки условий; завершение и знакомство не предполагаются.',evidence,action};const preview=previewRecommendation(rec,context.currentPlan||source,ctx);if(preview.ok)out.push(rec);else out.push({id:'review-constraints',kind:'review',title:'Проверить ограничения плана',why:preview.error,evidence,action:{type:'review'}});
+ if((f.known||f.partial)&&!f.complete&&['time','difficulty'].includes(f.reason)&&f.plan&&roundRecSameScheme(f.plan,source)){
+ for(const b of source.blocks.slice().reverse()){const rec={id:'trim-'+b.id,kind:'trim',title:'Убрать один дополнительный блок',why:f.partial?`Причина остановки — «${roundRecReasonRu(f.reason)}»; остальной результат не отмечен. Можно сократить дополнительную часть; это не вывод о выполнении, пропуске или готовности. Обязательства сохраняются.`:`Цели предыдущего занятия отмечены не полностью, причина — «${roundRecReasonRu(f.reason)}». Можно сократить дополнительную часть; обязательства сохраняются.`,evidence,action:{type:'trim',blockId:b.id}};if(previewRecommendation(rec,source,ctx).ok){out.push(rec);break;}}
+ }}return out;
+}
+function previewRecommendation(rec,currentPlan,context={}){
+ const blocked=error=>({ok:false,plan:null,config:null,changes:[],error});
+ try{
+ if(Array.isArray(context.history)&&context.history[0]?.stopReason==='pain')return blocked('Указана боль: остановка и пересмотр, без нового плана или замен.');
+ const base=roundRecAudit(currentPlan,context);if(!base.plan||base.unmet.length)return blocked(base.unmet.map(x=>x.message).join(' '));
+ const action=rec?.action||{},type=action.type;let candidate;
+ if(type==='repeat')candidate=clone(action.plan||base.plan);
+ else if(type==='trim'){
+  if(base.unmet.length)return blocked(base.unmet.map(x=>x.message).join(' '));
+  candidate=clone(base.plan);const b=candidate.blocks.find(b=>b.id===action.blockId);
+  if(!b||b.locked||['warm','cool'].includes(b.kind)||b.entries.some(e=>['warmup','cooldown'].includes(catalogMeta(EX[e.ex]).role)))return blocked('Блок не найден или не является необязательным.');
+  candidate.blocks=candidate.blocks.filter(x=>x.id!==b.id);candidate.edited=true;
+ }else return blocked('Это совет для пересмотра, а не применимое изменение плана.');
+ // Full configuration equality makes even explicit forged payloads fail closed.
+ if(!roundRecConfigEqual(candidate.config,base.plan.config))return blocked('Нельзя незаметно менять бюджет, инвентарь, усилие или обязательные флаги.');
+ const audit=roundRecAudit(candidate,context);if(audit.unmet.length)return blocked(audit.unmet.map(x=>x.message).join(' '));
+ if(type==='trim'&&audit.plan.estimated>=base.plan.estimated)return blocked('Сокращение времени не подтверждено.');
+ // Remove stale generated notes, then explain the final compiled plan only.
+ audit.plan.notes=[];const explanation=planExplanation(audit.plan,{...context,previousPlan:base.plan});audit.plan.notes=explanation.summary.concat(explanation.unmet.map(x=>x.message));
+ return {ok:true,plan:audit.plan,config:clone(audit.plan.config),changes:explanation.changes,error:null};
+ }catch(e){return blocked('Предпросмотр заблокирован: '+e.message);}
+}
+
+'use strict';
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ICONS={settings:'<path d="M4 7h16M4 17h16"/><circle cx="8" cy="7" r="3"/><circle cx="16" cy="17" r="3"/>',build:'<path d="M4 5h16M4 12h16M4 19h16"/><circle cx="8" cy="5" r="2"/><circle cx="16" cy="12" r="2"/><circle cx="10" cy="19" r="2"/>',plan:'<rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6M9 12h6M9 16h4"/>',book:'<path d="M12 5c-3-2-6-2-9-1v15c3-1 6-1 9 1 3-2 6-2 9-1V4c-3-1-6-1-9 1v15"/>',history:'<path d="M3 10a9 9 0 1 1 1 7M3 4v6h6M12 7v5l3 2"/>',arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',back:'<path d="M19 12H5m6-6-6 6 6 6"/>',close:'<path d="m6 6 12 12M6 18 18 6"/>',edit:'<path d="m14 4 6 6M4 20l5-1L21 7a2 2 0 0 0-4-4L5 15z"/>',swap:'<path d="M3 7h15l-3-3m3 3-3 3M21 17H6l3 3m-3-3 3-3"/>',play:'<path d="m8 5 11 7-11 7z"/>',pause:'<path d="M8 5v14M16 5v14"/>',save:'<path d="M6 3h12v18l-6-4-6 4z"/>',sound:'<path d="m4 9 4 0 5-5v16l-5-5H4zM16 8c3 2 3 6 0 8M19 5c5 4 5 10 0 14"/>',mute:'<path d="m4 9 4 0 5-5v16l-5-5H4zM17 9l5 6m-5 0 5-6"/>',boxing:'<path d="M5 14V8a3 3 0 0 1 3-3h6a4 4 0 0 1 4 4v6l-2 3H7zM7 18v3h9v-3M5 11H3v5l4 2"/>',strength:'<path d="M3 8v8M6 5v14M18 5v14M21 8v8M6 12h12"/>',bolt:'<path d="m13 2-9 12h7l-1 8 10-13h-7z"/>',plus:'<path d="M12 5v14M5 12h14"/>',check:'<path d="m5 12 4 4L19 6"/>',timer:'<circle cx="12" cy="13" r="8"/><path d="M9 2h6M12 5V2M12 9v5l3 2"/>',download:'<path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/>'};
 function icon(name){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]||ICONS.bolt}</svg>`;}
 function clock(s){s=Math.max(0,Math.ceil(Number(s)||0));return`${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;}
 const minutes=s=>Math.round(s/60);
-const KEY='round-training-v2';let storageOK=true,toastID=null,view='build',libraryFilter='all',libraryQuery='',sheetContext=null,pendingSummary=null,selectedRating=0;
-let state={config:clone(DEFAULT_CONFIG),plan:null,favorites:[],history:[],session:null,sound:true,volume:65,custom:[]};
-function readStorage(){try{return JSON.parse(localStorage.getItem(KEY));}catch(_){return null;}}
+const KEY='round-training-v3',LEGACY_KEY='round-training-v2';let storageOK=true,recoveryBlocked=false,toastID=null,view='build',libraryFilter='all',libraryQuery='',sheetContext=null,pendingSummary=null,selectedRating=0;
+let state={schema:3,version:3,profile:defaultProfile(),config:clone(DEFAULT_CONFIG),plan:null,favorites:[],history:[],session:null,sound:true,volume:65,custom:[]};
+function readStorage(){const current=localStorage.getItem(KEY),raw=current===null?localStorage.getItem(LEGACY_KEY):current;if(raw===null)return null;const parsed=JSON.parse(raw);roundStateObject(parsed,'saved state');return parsed;}
+function validSuppliedGear(raw){return !raw||!Object.hasOwn(raw,'gear')||(Array.isArray(raw.gear)&&raw.gear.every(id=>typeof id==='string'&&Object.hasOwn(EQUIPMENT,id)));}
 function customFrom(raw){
- if(!raw||!/^custom-[a-z0-9-]{1,50}$/.test(raw.id)||!['strength','core','conditioning','boxing'].includes(raw.cat)||!Object.hasOwn(PATTERN,raw.pattern))return null;
+ if(!raw||!validSuppliedGear(raw)||!/^custom-[a-z0-9-]{1,50}$/.test(raw.id)||!['strength','core','conditioning','boxing'].includes(raw.cat)||!Object.hasOwn(PATTERN,raw.pattern))return null;
  const mode=raw.mode==='time'?'time':'reps',value=Math.max(1,Math.min(mode==='time'?600:50,Number(raw.value)||10));
- return {id:raw.id,name:String(raw.name||'Моё упражнение').slice(0,80),cat:raw.cat,pattern:raw.pattern,gear:Array.isArray(raw.gear)?raw.gear.filter(x=>Object.hasOwn(EQUIPMENT,x)):[],mode,value,tempo:3,side:!!raw.side,tag:null,steps:(Array.isArray(raw.steps)?raw.steps:['Следуй технике, которую ты освоил с тренером.']).slice(0,6).map(s=>String(s).slice(0,500)),cue:String(raw.cue||'Сохраняй контролируемую технику.').slice(0,500),mistakes:String(raw.mistakes||'Не выполняй незнакомое движение на усталости.').slice(0,500),easier:String(raw.easier||'Уменьши нагрузку.').slice(0,500),harder:String(raw.harder||'Добавляй нагрузку только после освоения техники.').slice(0,500),source:'custom'};
+ return {id:raw.id,name:String(raw.name||'Моё упражнение').slice(0,80),cat:raw.cat,pattern:raw.pattern,gear:raw.gear===undefined?[]:[...raw.gear],mode,value,tempo:3,side:!!raw.side,tag:null,steps:(Array.isArray(raw.steps)?raw.steps:['Следуй технике, которую ты освоил с тренером.']).slice(0,6).map(s=>String(s).slice(0,500)),cue:String(raw.cue||'Сохраняй контролируемую технику.').slice(0,500),mistakes:String(raw.mistakes||'Не выполняй незнакомое движение на усталости.').slice(0,500),easier:String(raw.easier||'Уменьши нагрузку.').slice(0,500),harder:String(raw.harder||'Добавляй нагрузку только после освоения техники.').slice(0,500),source:'custom'};
 }
 // Validate against an isolated registry; no live state changes until commit.
 function prepareState(raw){
- if(!raw||typeof raw!=='object'||Array.isArray(raw))throw Error('Неверные данные');
- const state={session:null},registry=Object.fromEntries(Object.entries(EX).filter(([,ex])=>ex.source!=='custom'));
- const plan=value=>validPlan(value,registry);
- state.custom=(Array.isArray(raw.custom)?raw.custom:[]).slice(0,100).map(customFrom).filter(Boolean);for(const ex of state.custom)registry[ex.id]=ex;
- state.config=normalizeConfig(raw.config);state.plan=plan(raw.plan);
+ roundStateObject(raw,'state');
+ if(raw.version!==undefined)roundStateAssert([2,3].includes(raw.version),'version');
+ if(raw.schema!==undefined)roundStateAssert(raw.schema===3,'schema');
+ const state={schema:3,version:3,session:null},registry=Object.fromEntries(Object.entries(EX).filter(([,ex])=>ex.source!=='custom'));
+ const list=(value,max,name)=>{if(value===undefined)return [];roundStateAssert(Array.isArray(value)&&value.length<=max,name);return value;};
+ const plan=value=>{roundStateAssert(validSuppliedGear(value?.config),'plan.config.gear');const p=validPlan(value,registry);roundStateAssert(!!p,'plan');return p;};
+ const snapshot=value=>value===undefined?{}:{profileSnapshot:normalizeProfile(value,registry)};
+ state.custom=list(raw.custom,100,'custom').map(x=>{const ex=customFrom(x);roundStateAssert(!!ex&&!Object.hasOwn(registry,ex.id),'custom');registry[ex.id]=ex;return ex;});
+ state.profile=normalizeProfile(raw.profile,registry);
+ if(raw.config!==undefined)roundStateObject(raw.config,'config');
+ roundStateAssert(validSuppliedGear(raw.config),'config.gear');state.config=normalizeConfig(raw.config);state.plan=raw.plan==null?null:plan(raw.plan);
  state.sound=typeof raw.sound==='boolean'?raw.sound:true;state.volume=Number.isFinite(Number(raw.volume))?Math.max(0,Math.min(100,Number(raw.volume))):65;
- state.favorites=(Array.isArray(raw.favorites)?raw.favorites:[]).slice(0,50).map(f=>{const p=plan(f?.plan);return p?{id:String(f.id).replace(/[^a-z0-9-]/g,''),name:String(f.name||'Моя тренировка').slice(0,90),plan:p}:null;}).filter(Boolean);
- state.history=(Array.isArray(raw.history)?raw.history:[]).slice(0,200).map(h=>{if(!h||typeof h!=='object')return null;const p=plan(h.plan);if(!p)return null;return{id:String(h.id).replace(/[^a-z0-9-]/g,''),name:String(h.name||p.title).slice(0,100),date:String(h.date||''),elapsed:Math.max(0,Math.min(86400,Number(h.elapsed)||0)),rpe:Math.max(0,Math.min(10,Number(h.rpe)||0)),note:String(h.note||'').slice(0,1000),complete:!!h.complete,done:Math.max(0,Number(h.done)||0),total:Math.max(0,Number(h.total)||0),push:Math.max(0,Number(h.push)||0),squat:Math.max(0,Number(h.squat)||0),abs:Math.max(0,Number(h.abs)||0),rounds:Math.max(0,Number(h.rounds)||0),plan:p};}).filter(Boolean);
- if(raw.session?.plan){const p=plan(raw.session.plan);if(p){const steps=compile(p,registry),idx=Math.trunc(Number(raw.session.index));if(idx>=0&&idx<steps.length){const s=raw.session;state.session={id:String(s.id||Date.now()),plan:p,steps,index:idx,running:false,remaining:Math.max(0,Math.min(1800,Number(s.remaining)||0)),elapsed:Math.max(0,Math.min(86400,Number(s.elapsed)||0)),stepElapsed:Math.max(0,Number(s.stepElapsed)||0),target:Math.max(0,Math.min(100,Number(s.target)||steps[idx].reps||0)),logs:typeof s.logs==='object'&&s.logs?s.logs:{},started:s.started||new Date().toISOString(),notice:'Сессия восстановлена на паузе. Проверь звук и продолжай.'};}}}
+ state.favorites=list(raw.favorites,50,'favorites').map(f=>{roundStateObject(f,'favorite');return {id:String(f.id).replace(/[^a-z0-9-]/g,''),name:String(f.name||'Моя тренировка').slice(0,90),plan:plan(f.plan)};});
+ state.history=list(raw.history,200,'history').map(h=>{roundStateObject(h,'history');const p=plan(h.plan);return{id:String(h.id).replace(/[^a-z0-9-]/g,''),name:String(h.name||p.title).slice(0,100),date:String(h.date||''),elapsed:Math.max(0,Math.min(86400,Number(h.elapsed)||0)),rpe:Math.max(0,Math.min(10,Number(h.rpe)||0)),note:String(h.note||'').slice(0,1000),complete:!!h.complete,done:Math.max(0,Number(h.done)||0),total:Math.max(0,Number(h.total)||0),push:Math.max(0,Number(h.push)||0),squat:Math.max(0,Number(h.squat)||0),abs:Math.max(0,Number(h.abs)||0),rounds:Math.max(0,Number(h.rounds)||0),plan:p,...normalizeHistoryDetails(h,registry),...snapshot(h.profileSnapshot)};});
+ if(raw.session!=null){
+  const s=raw.session;roundStateObject(s,'session');const p=plan(s.plan),steps=compile(p,registry);
+  const number=(key,max,fallback=0)=>s[key]===undefined?fallback:roundStateNumber(s[key],0,max,'session.'+key);
+  const index=roundStateNumber(s.index,0,steps.length-1,'session.index',true);
+  state.session={id:String(s.id||Date.now()),plan:p,steps,index,running:false,remaining:number('remaining',86400),elapsed:number('elapsed',86400),stepElapsed:number('stepElapsed',86400),target:number('target',100,steps[index].reps||0),logs:s.logs===undefined?{}:clone(s.logs),started:s.started||new Date().toISOString(),notice:'Сессия восстановлена на паузе. Проверь звук и продолжай.',...snapshot(s.profileSnapshot)};
+  collectSessionResults(state.session,registry);
+ }
  return {state,registry};
 }
 function commitState(prepared){
@@ -332,18 +700,91 @@ function commitState(prepared){
  Object.assign(EX,prepared.registry);state=prepared.state;
 }
 function restoreState(raw){commitState(prepareState(raw));}
-try{const saved=readStorage();if(saved)restoreState(saved);}catch(_){/* Invalid saved data must not prevent startup. */}
-function persist(){try{const s=state.session?{...state.session,steps:undefined,running:false}:null;localStorage.setItem(KEY,JSON.stringify({...state,session:s}));storageOK=true;}catch(_){storageOK=false;}}
+try{const saved=readStorage();if(saved!==null){restoreState(saved);persist();}}catch(_){recoveryBlocked=true;state.recoveryNotice='Сохранённые данные не прочитаны. Исходное хранилище не перезаписано; наличие доступной копии не подтверждено. Автоматическая запись отключена до успешного импорта.';}
+function storagePayload(value){return {...value,schema:3,version:3,session:value.session?{...value.session,steps:undefined,running:false}:null};}
+function persist(){if(recoveryBlocked){storageOK=false;return false;}try{localStorage.setItem(KEY,JSON.stringify(storagePayload(state)));storageOK=true;return true;}catch(_){storageOK=false;return false;}}
 function toast(message){$('toast').textContent=message;$('toast').hidden=false;clearTimeout(toastID);toastID=setTimeout(()=>$('toast').hidden=true,3400);}
 function navHTML(){return [['build','build','Собрать'],['plan','plan','План'],['library','book','Упражнения'],['history','history','Мои']].map(([v,i,l])=>`<button data-action="view" data-view="${v}" class="${view===v?'active':''}" aria-current="${view===v?'page':'false'}">${icon(i)}${l}</button>`).join('');}
 function render(){
  $('nav').innerHTML=navHTML();$('settings-button').innerHTML=icon('settings');
  $('resume-banner').hidden=!state.session;if(state.session)$('resume-banner').textContent='Продолжить сессию · '+state.session.plan.title+' · '+clock(state.session.elapsed);
- if(view==='build')renderBuilder();if(view==='plan')renderPlan();if(view==='library')renderLibrary();if(view==='history')renderHistory();
+ if(view==='build')renderBuilder();if(view==='plan')renderPlan();if(view==='library')renderLibrary();if(view==='history')renderHistory();if(!['build','plan'].includes(view))$('app').innerHTML=dataNoticeHTML()+$('app').innerHTML;
 }
+const PROFILE_GOALS={general:'Общая форма',boxing:'Бокс',strength:'Сила',endurance:'Выносливость'};
+const PROFILE_LEVELS={unknown:'Не указан',beginner:'Начинающий',regular:'Регулярно тренируюсь'};
+const MUST_NAMES={rope:'10 минут скакалки',shadow:'3 раунда тени',quota:'50 отжиманий + 50 приседаний',abs:'60 скручиваний'};
+function dataNoticeHTML(){return `${state.recoveryNotice?`<div class="callout warning" role="alert">${esc(state.recoveryNotice)} <button class="secondary" data-action="settings">Резервная копия / импорт</button></div>`:''}${!storageOK?'<div class="callout warning" role="alert">Сохранение недоступно. Изменения только в памяти этой вкладки; экспортируй резервную копию.</div>':''}`;}
+function profileSummaryHTML(){const p=state.profile;return `${dataNoticeHTML()}<section class="card"><div class="field-title">Твой профиль <button class="secondary" data-action="profile">Изменить</button></div><p class="hint">${esc(PROFILE_GOALS[p.goal])} · ${esc(PROFILE_LEVELS[p.experience])} · исключено ${p.excluded.length}<br>Вес со слов: гиря ${p.weights.kb} кг · гантель ${p.weights.db} кг · Burn ${p.weights.burn} кг</p><label class="checkrow"><span>Подтверждаю свободное пространство<small>Для скакалки, перемещений и боя с тенью. Без этого обязательные блоки недоступны.</small></span><input id="space-clear" type="checkbox" ${p.spaceClear?'checked':''}></label></section>`;}
+function profileSheet(){const p=state.profile;openSheet('Профиль и условия',`<p class="hint">Сохранение не меняет текущий план, избранное или сессию. Вес — твои данные, не измерение.</p>${[['goal','Цель',PROFILE_GOALS],['experience','Опыт',PROFILE_LEVELS]].map(([k,label,opts])=>`<div class="form-row"><label for="profile-${k}">${label}</label><select id="profile-${k}">${Object.entries(opts).map(([v,n])=>`<option value="${v}" ${p[k]===v?'selected':''}>${n}</option>`).join('')}</select></div>`).join('')}${[['spaceClear','Свободное пространство'],['wall','Доступна стена'],['stable','Есть устойчивая опора'],['avoidImpact','Исключить прыжковую нагрузку']].map(([k,n])=>`<label class="checkrow"><span>${n}</span><input id="profile-${k}" type="checkbox" ${(k==='wall'||k==='stable'?p.supports[k]:p[k])?'checked':''}></label>`).join('')}<div class="two-inputs">${Object.entries(p.weights).map(([k,v])=>`<div class="form-row"><label for="profile-weight-${k}">${esc(EQUIPMENT[k])}, кг</label><input id="profile-weight-${k}" type="number" min="0" max="200" step="0.1" value="${v}"></div>`).join('')}</div><details><summary>Знакомые и исключённые движения</summary><p class="hint">Отметка «знакомо» не является оценкой техники. Исключения имеют приоритет.</p>${Object.values(EX).filter(e=>e.source!=='custom').map(e=>`<div class="form-row"><strong>${esc(e.name)}</strong><small> · ${esc(e.id)}</small><label><input type="checkbox" data-profile-familiar="${esc(e.id)}" ${p.familiar.includes(e.id)?'checked':''}> Знакомо</label> <label><input type="checkbox" data-profile-excluded="${esc(e.id)}" ${p.excluded.includes(e.id)?'checked':''}> Исключить</label></div>`).join('')}</details><div id="profile-error" role="alert"></div><button class="primary" data-action="save-profile">Сохранить профиль</button><button class="secondary" data-action="close-sheet">Отмена</button>`);}
+function saveProfile(raw){const staged=normalizeProfile(raw);state.profile=staged;persist();render();return true;}
+function saveProfileForm(){try{const raw={...state.profile,goal:$('profile-goal').value,experience:$('profile-experience').value,spaceClear:$('profile-spaceClear').checked,avoidImpact:$('profile-avoidImpact').checked,supports:{wall:$('profile-wall').checked,stable:$('profile-stable').checked},weights:Object.fromEntries(['kb','db','burn'].map(k=>[k,Number($('profile-weight-'+k).value)]))};for(const k of ['familiar','excluded'])raw[k]=[...state.profile[k].filter(id=>EX[id]?.source==='custom'),...Array.from(document.querySelectorAll(`[data-profile-${k}]:checked`),el=>el.dataset[k==='familiar'?'profileFamiliar':'profileExcluded'])];saveProfile(raw);closeSheet();toast(storageOK?'Профиль сохранён. Планы не изменены.':'Профиль изменён только в памяти; сохранение недоступно.');}catch(e){$('profile-error').textContent='Проверь профиль и вес: допустимо 0–200 кг.';}}
+function builderPreflight(cfg=state.config){const r=preflight(cfg,{profile:state.profile,history:state.history});if(r.minimum===null){const baseline=generate({...cfg,gear:Object.keys(EQUIPMENT)},1,{profile:{spaceClear:true,supports:{wall:true,stable:true}}});r.minimum=baseline.minimum??null;r.minimumBaseline=true;}return r;}
+function preflightHTML(r,allowFit=false){const fit=allowFit&&r.minimum&&!r.minimumBaseline&&r.conflicts.length&&r.conflicts.every(c=>c.code==='time-budget')?[30,45,60,75].find(n=>n*60>=r.minimum):null;const labels={space:'Подтверди свободное пространство',gear:'Нет выбранного инвентаря',excluded:'Движение исключено в профиле',support:'Не подтверждена опора',impact:'В профиле запрещены прыжки',eligibility:'Не подтверждено знакомство с техникой',unavailable:'Нет доступного движения'};return `<div class="callout ${r.ok?'':'warning'}" role="status"><strong>${r.minimum?`Минимум обязательных блоков: ≈ ${Math.ceil(r.minimum/60)} мин${r.minimumBaseline?' (без учёта конфликтов ниже)':''}`:'Минимум пока не определён'}</strong>${r.conflicts.map(c=>`<p>${esc(labels[c.code]||c.reason)}${c.exercises?.length?` — ${c.exercises.map(id=>esc(EX[id]?.name||id)).join(', ')}`:''}${c.requirement?` · ${esc(MUST_NAMES[c.requirement]||c.requirement)}`:''}</p>`).join('')}${r.ok?'<p>Обязательные блоки совместимы с профилем и временем.</p>':''}${fit?`<button class="secondary" data-action="fit-minimum" data-value="${fit}">Поставить ${fit} минут, сохранив обязательные блоки</button>`:''}</div>`;}
+function updatePreflight(){if($('build-error'))$('build-error').innerHTML=preflightHTML(builderPreflight(),true);}
+function previewPreset(name){if(!['ordinary','short','calm'].includes(name))return;const before=clone(state.config),after=clone(before);if(name==='ordinary')Object.assign(after,{minutes:75,effort:2,type:'mix',focus:'full'});if(name==='calm')Object.assign(after,{minutes:75,effort:1});if(name==='short'){after.minutes=30;after.must={rope:false,shadow:before.must.shadow,quota:false,abs:before.must.abs};}const show=c=>`${c.minutes} мин · ${TYPES[c.type]} · ${EFFORT[c.effort].name} · акцент: ${FOCUS[c.focus]}<br>${Object.entries(c.must).map(([k,v])=>`${k}: ${v?'вкл':'выкл'} (${MUST_NAMES[k]})`).join('<br>')}`;const changes=Object.keys(before.must).filter(k=>before.must[k]!==after.must[k]).map(k=>`${k}: ${before.must[k]?'вкл':'выкл'} → ${after.must[k]?'вкл':'выкл'}`);sheetContext={type:'preset',config:after};openSheet('Предпросмотр настроек',`<h3>ДО</h3><p>${show(before)}</p><h3>ПОСЛЕ</h3><p>${show(after)}</p><div class="callout warning">${changes.length?'Изменятся обязательные флаги: '+changes.join('; '):'Обязательные флаги не меняются.'} Текущий план и сессия не меняются.</div>${preflightHTML(builderPreflight(after))}<button class="primary" data-action="apply-preset">Применить показанные изменения</button><button class="secondary" data-action="close-sheet">Отмена</button>`);}
+function applyPreset(){if(sheetContext?.type!=='preset')return false;state.config=clone(sheetContext.config);persist();closeSheet();render();return true;}
+function manualConflicts(id,cfg=state.plan?.config||state.config){const ex=typeof id==='string'&&Object.hasOwn(EX,id)?EX[id]:null;if(!ex)return ['Неизвестное упражнение'];const m=catalogMeta(ex),p=state.profile,out=[];if(!canUse(ex,cfg))out.push('Нет выбранного инвентаря');if(p.excluded.includes(id))out.push('Исключено в профиле');if(m.requiresSupport&&!p.supports[m.requiresSupport])out.push('Не подтверждена опора: '+m.requiresSupport);if(m.space==='clear'&&!p.spaceClear)out.push('Подтверди свободное пространство');if(m.impact==='jump'&&p.avoidImpact)out.push('Прыжки запрещены профилем');return out;}
+function manualAllowed(id){return manualConflicts(id).length===0;}
+function replaceEntry(bi,ei,id){const b=state.plan?.blocks[bi],old=b?.entries[ei];if(!old||!catalogCanReplace(old.ex,id)||!manualAllowed(id)){toast('Замена несовместима с движением, инвентарём или профилем.');return false;}rememberPlanEdit();b.entries[ei]=entry(id);edited();return true;}
+function addManual(id){if(!state.plan||!manualAllowed(id)){toast('Нельзя добавить: '+manualConflicts(id).join('; '));return false;}const ex=EX[id],m=catalogMeta(ex),kind=m.role==='rope'?'rope':m.family==='shadow'?'boxing':m.role==='footwork'?'conditioning':ex.cat==='boxing'?'conditioning':ex.cat;const blk=block('added-'+Date.now().toString(36),ex.name,kind,[entry(id,kind==='boxing'?{value:180,mode:'time'}:{})],['boxing','rope'].includes(kind)?1:2,60,kind==='boxing'?60:20);const i=state.plan.blocks.findIndex(x=>x.kind==='cool');rememberPlanEdit();state.plan.blocks.splice(i<0?state.plan.blocks.length:i,0,blk);edited();return true;}
+function planProfileConflicts(p){if(!p)return ['Нет плана'];return [...new Set(p.blocks.flatMap(b=>b.entries.flatMap(e=>manualConflicts(e.ex,p.config).map(reason=>`${EX[e.ex]?.name||e.ex}: ${reason}`))))];}
+async function startPlanUI(p){const conflicts=planProfileConflicts(p);if(conflicts.length){openSheet('Проверь условия перед стартом',`<div class="callout warning" role="alert">${conflicts.map(esc).join('<br>')}</div><button class="primary" data-action="profile">Изменить профиль</button><button class="secondary" data-action="close-sheet">Отмена</button>`);return false;}await startPlan(p);return true;}
+// Proposals are transient: a dialog never mutates saved state or a live timer.
+let recommendationUndo=null,explanationPreviousPlan=null;
+const STOP_REASONS={unknown:'Не указана / неизвестно',time:'Не хватило времени',difficulty:'Слишком тяжело',unfamiliar:'Незнакомое движение',pain:'Боль — остановиться и пересмотреть',other:'Другая причина'};
+const FAMILY_LABELS={row:'Тяга к корпусу',curl:'Сгибание локтя','horizontal-press':'Горизонтальный жим','overhead-press':'Жим над головой',squat:'Приседание','split-squat':'Приседание в разножке','loaded-hinge':'Наклон с отягощением',lunge:'Выпад','lateral-lunge':'Боковой выпад',shadow:'Бой с тенью',rope:'Скакалка',footwork:'Работа ног',warmup:'Разминка',cooldown:'Заминка','suitcase-hold':'Удержание веса сбоку',crunch:'Скручивание',deadbug:'Мёртвый жук',plank:'Планка',sideplank:'Боковая планка',birddog:'Разгибание противоположных руки и ноги',bridge:'Ягодичный мост','arm-cycle':'Циклическая работа рук',stepping:'Шаги','calf-raise':'Подъём на носки',unknown:'Неклассифицированное движение'};
+function familyLabel(ex){const m=catalogMeta(ex);return FAMILY_LABELS[m.family]||m.family;}
+function catalogStatus(ex){const m=catalogMeta(ex),p=state.profile;return [m.selection==='manual'?'Только вручную · без автоматического назначения':'Автовыбор только при выполнении условий',m.requiresSupport?`Опора ${m.requiresSupport==='wall'?'стена':'устойчивая'}: ${p.supports[m.requiresSupport]?'подтверждена':'не подтверждена'}`:'Специальная опора не требуется',m.space==='clear'?`Свободное пространство: ${p.spaceClear?'подтверждено':'не подтверждено'}`:'Пространство: '+(m.space==='small'?'достаточно небольшой зоны':m.space)].join(' · ');}
+function recommendationContext(){return {profile:state.profile,history:state.history,config:state.config,currentPlan:state.plan};}
+function currentRecommendations(){return nextRecommendations(state.history,recommendationContext());}
+function recommendationStamp(){return JSON.stringify([state.plan,state.config,state.profile,state.history]);}
+function resolveRecommendation(id,historyId=null){if(historyId){const h=state.history.find(h=>h.id===historyId);if(!h||id!=='repeat-history'||h.stopReason==='pain')return null;return {id,kind:'repeat',title:'Повторить сохранённую схему',why:'Повтор не означает готовность или выполнение прошлой работы.',evidence:[],action:{type:'repeat',plan:clone(h.plan)}};}return currentRecommendations().find(r=>r.id===id);}
+function quotaSnapshotHTML(p){const c=counts(p);return `<p>Время: ${clock(duration(p))} (${duration(p)} с) / бюджет ${p.config.minutes*60} с<br>Отжимания ${c.push} · приседания ${c.squat} · пресс ${c.abs} · скакалка ${c.rope} с · тень ${c.rounds} раундов</p><p>${Object.entries(p.config.must).map(([k,v])=>`${esc(MUST_NAMES[k])}: ${v?'вкл':'выкл'}`).join('<br>')}</p>`;}
+function exactPlanChangesHTML(before,after){const describe=b=>b?`${b.entries.map(e=>EX[e.ex].name+' — '+entryLabel(e)).join('; ')} · ${b.sets} подход(а), отдых ${b.rest} с, переход ${b.gap} с · ≈ ${blockDuration(b)} с`:'нет блока';return [...new Set([...before.blocks,...after.blocks].map(b=>b.id))].map(id=>{const a=before.blocks.find(b=>b.id===id),b=after.blocks.find(b=>b.id===id);if(JSON.stringify(a)===JSON.stringify(b))return '';return `<p><strong>${esc(a?.title||b?.title)}</strong><br>ДО: ${esc(describe(a))}<br>ПОСЛЕ: ${esc(describe(b))}</p>`;}).join('');}
+function recommendationHTML(){const rs=currentRecommendations();return `<section class="card"><h2>Следующее занятие</h2><p class="hint">Предложения не меняют нагрузку автоматически. Готовность не измеряется.</p>${rs.map(r=>`<div class="callout ${r.kind==='stop'?'warning':''}"><h3>${esc(r.title)}</h3><p>${esc(r.why)}</p><ul>${r.evidence.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${['repeat','trim'].includes(r.action.type)?`<button class="secondary" data-action="preview-recommendation" data-id="${esc(r.id)}">Посмотреть изменения</button>`:r.action.type==='ask-facts'&&state.history.length?`<button class="secondary" data-action="history-facts" data-id="${esc(state.history[0].id)}">Указать причину / усилие</button>`:`<button class="secondary" data-action="profile">${r.kind==='stop'?'Остановиться; пересмотреть условия':'Проверить профиль и условия'}</button>`}</div>`).join('')}${recommendationUndo?'<button class="secondary" data-action="undo-recommendation">Отменить последнее принятие</button>':''}</section>`;}
+function previewRecommendationUI(id,historyId=null){
+ const rec=resolveRecommendation(id,historyId),base=state.plan||state.history[0]?.plan;
+ if(!rec||!base||!roundRecConfigEqual(state.config,base.config)){toast('План и текущие настройки не согласованы. Проверь их перед предложением.');return false;}
+ const result=previewRecommendation(rec,base,recommendationContext());
+ if(!result.ok){toast(result.error);return false;}
+ const pending={type:'recommendation',id,historyId,stamp:recommendationStamp(),session:state.session,result:clone(result)};
+ openSheet('Предпросмотр предложения',`<h3>${esc(rec.title)}</h3><p>${esc(rec.why)}</p><h3>ДО</h3>${quotaSnapshotHTML(base)}<h3>ПОСЛЕ</h3>${quotaSnapshotHTML(result.plan)}<h3>Точные изменения</h3><ul>${result.changes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${exactPlanChangesHTML(base,result.plan)}<details><summary>Полный состав после применения</summary>${planExplanationHTML(result.plan,base)}</details><p class="hint">Только явное принятие заменит план. Обязательные флаги сохраняются.${state.session?' Есть активная сессия: её замена потребует отдельного подтверждения.':''}</p><button class="primary" data-action="accept-recommendation">Принять показанный план</button><button class="secondary" data-action="reject-recommendation">Отклонить</button><button class="secondary" data-action="close-sheet">Отмена</button>`);sheetContext=pending;return true;
+}
+function rejectRecommendation(){closeSheet();return false;}
+function acceptRecommendation(){
+ const pending=sheetContext;if(pending?.type!=='recommendation'||!$('sheet').open)return false;
+ const fail=message=>{closeSheet();toast(message);return false;};
+ if(pending.stamp!==recommendationStamp()||pending.session!==state.session)return fail('Предпросмотр устарел. План, условия или история изменились; открой его заново.');
+ const rec=resolveRecommendation(pending.id,pending.historyId),base=state.plan||state.history[0]?.plan;
+ if(!rec||!roundRecConfigEqual(state.config,base?.config))return fail('Предложение больше недоступно.');
+ const fresh=previewRecommendation(rec,base,recommendationContext());
+ if(!fresh.ok)return fail(fresh.error);
+ if(JSON.stringify(fresh)!==JSON.stringify(pending.result))return fail('Условия предложения изменились. Нужен новый предпросмотр.');
+ if(state.session&&!confirm('Заменить незавершённую сессию показанным планом? Её текущий прогресс не будет записан.'))return rejectRecommendation();
+ const before={plan:clone(state.plan),config:clone(state.config)};
+ if(state.session){pauseSession();state.session=null;$('player').hidden=true;document.body.style.overflow='';}
+ explanationPreviousPlan=before.plan;state.plan=clone(fresh.plan);state.config=clone(fresh.config);
+ recommendationUndo={...before,after:JSON.stringify([state.plan,state.config])};persist();closeSheet();view='plan';render();return true;
+}
+function undoRecommendation(){const old=recommendationUndo;if(!old)return false;if(old.after!==JSON.stringify([state.plan,state.config])){toast('План уже изменён. Отмена не перезапишет новые правки.');return false;}explanationPreviousPlan=clone(state.plan);state.plan=clone(old.plan);state.config=clone(old.config);recommendationUndo=null;persist();render();toast('Предыдущий план и настройки восстановлены. Активная сессия не изменена.');return true;}
+function rememberPlanEdit(){explanationPreviousPlan=clone(state.plan);}
+function planExplanationHTML(p,previousPlan=explanationPreviousPlan){const e=planExplanation(p,{profile:state.profile,previousPlan});if(previousPlan&&JSON.stringify(previousPlan.blocks.map(b=>b.id))!==JSON.stringify(p.blocks.map(b=>b.id)))e.changes.push('Порядок блоков: '+previousPlan.blocks.map(b=>b.title).join(' → ')+' / теперь: '+p.blocks.map(b=>b.title).join(' → '));const achieved=Object.entries(p.config.must).filter(([k,v])=>v&&(k==='quota'?!e.unmet.some(u=>['quota-push','quota-squat'].includes(u.code)):k==='shadow'?!e.unmet.some(u=>u.code.startsWith('shadow')||u.code==='quota-shadow'):!e.unmet.some(u=>u.code==='quota-'+k))).map(([k])=>MUST_NAMES[k]);return `<section class="card"><h2>Почему эти блоки</h2>${e.summary.map(t=>`<p>${esc(t)}</p>`).join('')}<p>Обязательства в составе плана: ${achieved.length?achieved.map(esc).join('; '):'нет подтверждённых обязательных целей'}.</p>${e.blocks.map(b=>`<p><strong>${esc(b.title)}</strong><br>${esc(b.reason)}</p>`).join('')}${e.unmet.map(u=>`<div class="callout warning">Не выполнено условие: ${esc(u.message)}</div>`).join('')}${e.changes.length?`<h3>Изменения</h3><ul>${e.changes.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}<p class="hint">Это цели плана, не фактически выполненная работа.</p>${recommendationUndo?'<button class="secondary" data-action="undo-recommendation">Отменить последнее принятие</button>':''}</section>`;}
+function historyDetailsHTML(h){
+ const time=`<p>Фактическое время: ${clock(h.elapsed)} (${h.elapsed} с) · план: ≈ ${clock(duration(h.plan))} (${duration(h.plan)} с), включая отдых и переходы.</p>`;
+ const weight=h.profileSnapshot?`Вес со слов на момент сессии: гиря ${h.profileSnapshot.weights.kb} кг · гантель ${h.profileSnapshot.weights.db} кг · Burn ${h.profileSnapshot.weights.burn} кг.`:'Вес в этой сессии неизвестен: снимок профиля не сохранён.';
+ let d;try{d=normalizeHistoryDetails(h);}catch(_){return time+'<p>Подробности повреждены; выполнение неизвестно.</p>';}
+ const reason=`<p>Причина остановки: ${esc(STOP_REASONS[d.stopReason])}. RPE: ${h.rpe?esc(h.rpe)+'/10':'не указана'}.</p><p class="hint">${esc(weight)}</p>`;
+ if(!d.detailsKnown)return time+reason+'<p>Подробности выполнения неизвестны. Старая запись содержит только итоговые показатели; подходы и стороны не восстановлены.</p>';
+ const expected=compile(h.plan).map((s,index)=>({...s,index})).filter(s=>s.ex);
+ const matches=d.steps.every(r=>{const s=expected.find(s=>s.index===r.index);return s&&['ex','blockId','kind','side','mode','set'].every(k=>s[k]===r[k])&&r.target===(s.mode==='reps'?s.reps:s.seconds);});
+ if(!matches)return time+reason+'<p>Подробности не совпадают с планом; выполнение неизвестно. Исходные записи сохранены без исправлений.</p>';
+ return time+reason+`<details><summary>Упражнения, подходы и стороны — цель / факт</summary>${expected.map(s=>{const r=d.steps.find(r=>r.index===s.index),unit=s.mode==='reps'?' повт.':' с',actual=r?(s.mode==='reps'?(r.actualReps===null?'неизвестно':r.actualReps+unit):(r.actualSeconds===null?'неизвестно':r.actualSeconds+unit)):'не отмечен';return `<div class="form-row"><strong>${esc(EX[s.ex]?.name||s.ex)}</strong><p>Подход ${s.set}${s.side?' · '+esc(s.side):''} · блок ${esc(s.blockId)}<br>Цель: ${s.mode==='reps'?s.reps:s.seconds}${unit} · Факт: ${actual}<br>Время: ${r?.actualSeconds==null?'не отмечено':r.actualSeconds+' с'} / план ≈ ${s.estimate} с<br>Статус: ${r?(r.status==='done'?'отмечено выполненным':'явно пропущено'):'результат не отмечен; выполнение и пропуск неизвестны'}</p></div>`;}).join('')}</details>`;
+}
+function historyFacts(id){const h=state.history.find(h=>h.id===id);if(!h)return false;pendingSummary=clone(h);selectedRating=h.rpe||0;showSummary();return true;}
+function saveSummary(){if(!pendingSummary)return false;const h=state.history.find(h=>h.id===pendingSummary.id);if(!h)return false;const reason=$('summary-reason')?.value||'unknown';h.stopReason=Object.hasOwn(STOP_REASONS,reason)?reason:'unknown';h.rpe=Number.isInteger(selectedRating)&&selectedRating>=0&&selectedRating<=10?selectedRating:0;h.note=String($('summary-note')?.value||'').slice(0,1000);persist();pendingSummary=null;closeSheet();render();toast(storageOK?'Результат сохранён.':'Результат только в памяти: сохранение недоступно.');return true;}
 function renderBuilder(){
  const c=state.config;const gearCount=c.gear.length;
- $('app').innerHTML=`<div class="hero"><div class="eyebrow">ТВОЯ ДОМАШНЯЯ СЕССИЯ</div><h1>Твой темп.<br><em>Твои правила.</em></h1><p class="sub">Выбери нагрузку. Собери тренировку.<br>Дальше — таймер, техника и работа.</p></div><div class="builder-grid"><section class="card duration-card"><div class="field-title">Сколько времени <span class="number">01 / 06</span></div><div class="big-minute"><strong>${c.minutes}</strong><span>МИНУТ</span></div><div class="pills duration-pills">${[30,45,60,75,90].map(n=>`<button class="pill ${c.minutes===n?'active':''}" data-action="config" data-key="minutes" data-value="${n}" aria-pressed="${c.minutes===n}">${n}</button>`).join('')}</div><p class="hint">Включая разогрев, отдых и заминку.</p></section><section class="card"><div class="field-title">Насколько тяжело <span class="number">02 / 06</span></div><div class="segment">${[1,2,3].map(n=>`<button data-action="config" data-key="effort" data-value="${n}" class="${c.effort===n?'active':''}" aria-pressed="${c.effort===n}">${EFFORT[n].name}<small>${EFFORT[n].rpe}</small></button>`).join('')}</div><p class="effort-note">${EFFORT[c.effort].description}</p></section><section class="card"><div class="field-title">Тип тренировки <span class="number">03 / 06</span></div><div class="type-grid">${[['mix','boxing','Раунды + силовые блоки'],['boxing','boxing','Техника, защита, ритм'],['strength','strength','Мышцы, контроль, тяги'],['endurance','bolt','Интервалы и темп']].map(([k,i,d])=>`<button class="type-button ${c.type===k?'active':''}" data-action="config" data-key="type" data-value="${k}" aria-pressed="${c.type===k}">${icon(i)}<strong>${TYPES[k]}</strong><small>${d}</small></button>`).join('')}</div></section><section class="card focus"><div class="field-title">На чём акцент <span class="number">04 / 06</span></div><div class="pills">${Object.entries(FOCUS).map(([k,l])=>`<button class="pill ${c.focus===k?'active':''}" data-action="config" data-key="focus" data-value="${k}" aria-pressed="${c.focus===k}">${l}</button>`).join('')}</div><p class="hint">Акцент меняет подбор упражнений. Не превращает всю сессию в нагрузку на одну мышцу.</p></section></div><details class="card advanced" id="advanced-builder"><summary><span>Инвентарь и обязательные блоки<br><span class="small muted" style="font-weight:400">${gearCount} предмета · ${Object.values(c.must).filter(Boolean).length} обязательных блока</span></span></summary><div class="advanced-body"><div class="field-title">Что под рукой <span class="number">05 / 06</span></div><div class="gear-grid">${Object.entries(EQUIPMENT).map(([k,l])=>`<button class="${c.gear.includes(k)?'active':''}" data-action="gear" data-value="${k}" aria-pressed="${c.gear.includes(k)}">${c.gear.includes(k)?'✓ ':''}${l}</button>`).join('')}</div><div class="field-title">Обязательно оставить <span class="number">06 / 06</span></div>${[['rope','10 минут скакалки','Перед основной работой, не на максимуме.'],['shadow','Не менее 3 раундов тени','3 минуты работы / 1 минута отдыха.'],['quota','50 отжиманий + 50 приседаний','5 пар по 10. Подходы можно дробить.'],['abs','60 скручиваний на пресс','3 подхода по 20, с отдельным отдыхом.']].map(([k,l,d])=>`<label class="checkrow"><span>${l}<small>${d}</small></span><input type="checkbox" data-must="${k}" ${c.must[k]?'checked':''}></label>`).join('')}<p class="hint">Обязательные блоки — минимум программы, а не пожелания. Ничего не убирается незаметно.</p></div></details><div id="build-error"></div><div class="callout">Силовые движения, которые для тебя новые, сначала разбери по карточке. В генераторе нет махов и рывков гири, ударов с гантелями или работы через боль.</div><div class="actions"><button class="secondary" data-action="round-timer">${icon('timer')} Только раунды</button><button class="secondary" data-action="how-builder">${icon('book')} Как собирается</button></div>`;
+ $('app').innerHTML=`<div class="hero"><div class="eyebrow">ТВОЯ ДОМАШНЯЯ СЕССИЯ</div><h1>Твой темп.<br><em>Твои правила.</em></h1><p class="sub">Выбери нагрузку. Собери тренировку.<br>Дальше — таймер, техника и работа.</p></div>${profileSummaryHTML()}${recommendationHTML()}<div class="actions">${[['ordinary','Обычная'],['short','Короткая · 30 мин'],['calm','Спокойная']].map(([k,n])=>`<button class="secondary" data-action="preset" data-preset="${k}">${n}</button>`).join('')}</div><div class="builder-grid"><section class="card duration-card"><div class="field-title">Сколько времени <span class="number">01 / 06</span></div><div class="big-minute"><strong>${c.minutes}</strong><span>МИНУТ</span></div><div class="pills duration-pills">${[30,45,60,75,90].map(n=>`<button class="pill ${c.minutes===n?'active':''}" data-action="config" data-key="minutes" data-value="${n}" aria-pressed="${c.minutes===n}">${n}</button>`).join('')}</div><p class="hint">Включая разогрев, отдых и заминку.</p></section><section class="card"><div class="field-title">Насколько тяжело <span class="number">02 / 06</span></div><div class="segment">${[1,2,3].map(n=>`<button data-action="config" data-key="effort" data-value="${n}" class="${c.effort===n?'active':''}" aria-pressed="${c.effort===n}">${EFFORT[n].name}<small>${EFFORT[n].rpe}</small></button>`).join('')}</div><p class="effort-note">${EFFORT[c.effort].description} Ориентир усилия — не измерение.</p></section><section class="card"><div class="field-title">Тип тренировки <span class="number">03 / 06</span></div><div class="type-grid">${[['mix','boxing','Раунды + силовые блоки'],['boxing','boxing','Техника, защита, ритм'],['strength','strength','Мышцы, контроль, тяги'],['endurance','bolt','Интервалы и темп']].map(([k,i,d])=>`<button class="type-button ${c.type===k?'active':''}" data-action="config" data-key="type" data-value="${k}" aria-pressed="${c.type===k}">${icon(i)}<strong>${TYPES[k]}</strong><small>${d}</small></button>`).join('')}</div></section><section class="card focus"><div class="field-title">На чём акцент <span class="number">04 / 06</span></div><div class="pills">${Object.entries(FOCUS).map(([k,l])=>`<button class="pill ${c.focus===k?'active':''}" data-action="config" data-key="focus" data-value="${k}" aria-pressed="${c.focus===k}">${l}</button>`).join('')}</div><p class="hint">Акцент меняет подбор упражнений. Не превращает всю сессию в нагрузку на одну мышцу.</p></section></div><details class="card advanced" id="advanced-builder"><summary><span>Инвентарь и обязательные блоки<br><span class="small muted" style="font-weight:400">${gearCount} предмета · ${Object.values(c.must).filter(Boolean).length} обязательных блока</span></span></summary><div class="advanced-body"><div class="field-title">Что под рукой <span class="number">05 / 06</span></div><div class="gear-grid">${Object.entries(EQUIPMENT).map(([k,l])=>`<button class="${c.gear.includes(k)?'active':''}" data-action="gear" data-value="${k}" aria-pressed="${c.gear.includes(k)}">${c.gear.includes(k)?'✓ ':''}${l}</button>`).join('')}</div><div class="field-title">Обязательно оставить <span class="number">06 / 06</span></div>${[['rope','10 минут скакалки','Перед основной работой, не на максимуме.'],['shadow','Не менее 3 раундов тени','3 минуты работы / 1 минута отдыха.'],['quota','50 отжиманий + 50 приседаний','5 пар по 10. Подходы можно дробить.'],['abs','60 скручиваний на пресс','3 подхода по 20, с отдельным отдыхом.']].map(([k,l,d])=>`<label class="checkrow"><span>${l}<small>${d}</small></span><input type="checkbox" data-must="${k}" ${c.must[k]?'checked':''}></label>`).join('')}<p class="hint">Обязательные блоки — минимум программы, а не пожелания. Ничего не убирается незаметно.</p></div></details><div id="build-error">${preflightHTML(builderPreflight())}</div><div class="callout">Силовые движения, которые для тебя новые, сначала разбери по карточке. В генераторе нет махов и рывков гири, ударов с гантелями или работы через боль.</div><div class="actions"><button class="secondary" data-action="round-timer">${icon('timer')} Только раунды</button><button class="secondary" data-action="how-builder">${icon('book')} Как собирается</button></div>`;
  $('bottom-action').innerHTML=`<button class="primary" data-action="generate">Собрать тренировку ${icon('arrow')}</button><small>${c.minutes} мин · ${TYPES[c.type]} · ${EFFORT[c.effort].name.toLowerCase()}</small>`;
 }
 function boxingLabel(b){const values=[...new Set(b.entries.map(e=>e.mode==='time'?e.value:0))];return values.length===1&&values[0]?`${clock(values[0])} / ${clock(b.gap)}`:'свой интервал';}
@@ -351,14 +792,14 @@ function entryLabel(it){const ex=EX[it.ex];return (it.mode==='reps'?`${it.value}
 function renderPlan(){
  const p=state.plan;if(!p){$('app').innerHTML='<div class="hero"><div class="eyebrow">ПЛАН ТРЕНИРОВКИ</div><h1>Сначала —<br>твои параметры.</h1></div><div class="empty"><h3>Пока без плана</h3>Выбери время, тип и нагрузку. Программа появится здесь.</div>';$('bottom-action').innerHTML='<button class="primary" data-action="view" data-view="build">К конструктору</button>';return;}
  const secs=duration(p),ct=counts(p),c=p.config;
- const warnings=[];if(secs>c.minutes*60)warnings.push(`После правок план ≈${minutes(secs)} мин — больше выбранных ${c.minutes} мин.`);
+ const warnings=planProfileConflicts(p);if(c.must.abs&&ct.abs!==60)warnings.push(`После правок цель 60 скручиваний изменилась: ${ct.abs}.`);if(secs>c.minutes*60)warnings.push(`После правок план ≈${minutes(secs)} мин — больше выбранных ${c.minutes} мин.`);
  if(c.must.quota&&(ct.push!==50||ct.squat!==50))warnings.push(`После правок цель 50 + 50 изменилась: ${ct.push} отжиманий и ${ct.squat} приседаний.`);
  if(c.must.shadow&&ct.rounds<3)warnings.push('После правок осталось меньше 3 раундов боя с тенью.');if(c.must.rope&&ct.rope<600)warnings.push('После правок скакалка короче обязательных 10 минут.');
- $('app').innerHTML=`<div class="eyebrow">${p.edited?'ТВОЯ ВЕРСИЯ ПЛАНА':'ПЛАН СОБРАН'} · ${FOCUS[c.focus].toUpperCase()}</div><div class="plan-heading"><h1>${esc(p.title)}</h1><button class="icon-button" data-action="view" data-view="build" aria-label="Изменить требования">${icon('build')}</button></div><p class="sub">${EFFORT[c.effort].description}</p><div class="metric-row"><div class="metric"><strong>≈ ${minutes(secs)}</strong><small>минут с отдыхом</small></div><div class="metric"><strong>${ct.rounds||'—'}</strong><small>раундов тени</small></div><div class="metric"><strong>${c.effort===3?'8':c.effort===2?'6–7':'4–5'}</strong><small>усилие из 10</small></div></div><div class="timelinebar" aria-label="Распределение запланированного времени">${p.blocks.map(b=>`<span class="${b.kind}" style="flex:${compile({blocks:[b]}).filter(s=>!['rest','prep'].includes(s.kind)).reduce((n,s)=>n+s.estimate,0)}" title="${esc(b.title)}"></span>`).join('')}<span style="flex:${ct.rest};background:var(--line)"></span></div><div class="bar-key"><span><i class="dot boxing"></i>Бокс</span><span><i class="dot strength"></i>Сила</span><span><i class="dot conditioning"></i>Темп</span><span><i class="dot core"></i>Корпус</span></div><div class="actions"><button class="secondary" data-action="reroll">${icon('swap')} Другой вариант</button><button class="secondary" data-action="save-plan">${icon('save')} Сохранить</button></div><div class="quota-badges"><span>Скакалка ${minutes(ct.rope)} мин</span><span>Отжимания ${ct.push}</span><span>Приседания ${ct.squat}</span><span>Скручивания ${ct.abs}</span></div>${warnings.map(s=>`<div class="callout warning">${esc(s)}</div>`).join('')}<div class="section-label"><h2>Порядок работы</h2><span>${p.blocks.length} блоков</span></div>${p.blocks.map((b,bi)=>`<section class="block-card"><div class="block-head"><div class="block-index">${String(bi+1).padStart(2,'0')}</div><div class="block-title"><strong>${esc(b.title)}</strong><small>${b.kind==='boxing'?`${b.entries.length} раундов · ${boxingLabel(b)} · `:b.sets>1?`${b.sets} кругов · `:''}${clock(blockDuration(b))} ${b.entries.some(e=>e.mode==='reps')?'≈':''}</small></div><button class="icon-button" data-action="edit-block" data-index="${bi}" aria-label="Изменить блок ${esc(b.title)}">${icon('edit')}</button></div>${b.entries.map((it,ei)=>`<div class="ex-row"><button class="ex-main" data-action="tech" data-ex="${esc(it.ex)}"><strong>${esc(EX[it.ex].name)}</strong><span>${entryLabel(it)}${EX[it.ex].gear.length?' · '+EX[it.ex].gear.map(x=>EQUIPMENT[x]).join(', '):''}<span class="learn">Техника ↗</span></span></button>${!b.locked?`<button class="swap" data-action="replace" data-block="${bi}" data-entry="${ei}" aria-label="Заменить ${esc(EX[it.ex].name)}">${icon('swap')}</button>`:''}</div>`).join('')}<div class="block-foot">${b.kind==='boxing'?`Между раундами ${clock(b.gap)}. Перед стартом — сигналы за 5 секунд.`:b.kind==='rope'?'Части выполняются подряд. Всего '+clock(blockDuration(b))+'.':b.locked?'Отжимания можно дробить 5 + 5. Ориентируйся на число кругов и повторов выше.':b.sets>1?`Отдых между кругами ${clock(b.rest)}${b.entries.length>1?` · между упражнениями ${clock(b.gap)}`:''}.`:'Нажми на название упражнения, чтобы открыть технику.'}</div></section>`).join('')}<button class="secondary" data-action="add-block" style="width:100%">${icon('plus')} Добавить упражнение / блок</button><p class="hint">Время силовых — оценка по повторениям и темпу. Таймер не завершает подход за тебя: сделал — нажми «Готово». Переходы между блоками уже учтены.</p>${p.notes.map(n=>`<div class="callout">${esc(n)}</div>`).join('')}`;
+ $('app').innerHTML=`${dataNoticeHTML()}<div class="eyebrow">${p.edited?'ТВОЯ ВЕРСИЯ ПЛАНА':'ПЛАН СОБРАН'} · ${FOCUS[c.focus].toUpperCase()}</div><div class="plan-heading"><h1>${esc(p.title)}</h1><button class="icon-button" data-action="view" data-view="build" aria-label="Изменить требования">${icon('build')}</button></div><p class="sub">${EFFORT[c.effort].description}</p><div class="metric-row"><div class="metric"><strong>≈ ${minutes(secs)}</strong><small>минут с отдыхом</small></div><div class="metric"><strong>${ct.rounds||'—'}</strong><small>раундов тени</small></div><div class="metric"><strong>${c.effort===3?'8':c.effort===2?'6–7':'4–5'}</strong><small>цель усилия / 10 · не измерение</small></div></div><div class="timelinebar" aria-label="Распределение запланированного времени">${p.blocks.map(b=>`<span class="${b.kind}" style="flex:${compile({blocks:[b]}).filter(s=>!['rest','prep'].includes(s.kind)).reduce((n,s)=>n+s.estimate,0)}" title="${esc(b.title)}"></span>`).join('')}<span style="flex:${ct.rest};background:var(--line)"></span></div><div class="bar-key"><span><i class="dot boxing"></i>Бокс</span><span><i class="dot strength"></i>Сила</span><span><i class="dot conditioning"></i>Темп</span><span><i class="dot core"></i>Корпус</span></div><div class="actions"><button class="secondary" data-action="reroll">${icon('swap')} Другой вариант</button><button class="secondary" data-action="save-plan">${icon('save')} Сохранить</button></div><div class="quota-badges"><span>Скакалка ${minutes(ct.rope)} мин</span><span>Отжимания ${ct.push}</span><span>Приседания ${ct.squat}</span><span>Скручивания ${ct.abs}</span></div>${warnings.map(s=>`<div class="callout warning">${esc(s)}</div>`).join('')}<div class="section-label"><h2>Порядок работы</h2><span>${p.blocks.length} блоков</span></div>${p.blocks.map((b,bi)=>`<section class="block-card"><div class="block-head"><div class="block-index">${String(bi+1).padStart(2,'0')}</div><div class="block-title"><strong>${esc(b.title)}</strong><small>${b.kind==='boxing'?`${b.entries.length} раундов · ${boxingLabel(b)} · `:b.sets>1?`${b.sets} кругов · `:''}${clock(blockDuration(b))} ${b.entries.some(e=>e.mode==='reps')?'≈':''}</small></div><button class="icon-button" data-action="edit-block" data-index="${bi}" aria-label="Изменить блок ${esc(b.title)}">${icon('edit')}</button></div>${b.entries.map((it,ei)=>`<div class="ex-row"><button class="ex-main" data-action="tech" data-ex="${esc(it.ex)}"><strong>${esc(EX[it.ex].name)}</strong><span>${entryLabel(it)}${EX[it.ex].gear.length?' · '+EX[it.ex].gear.map(x=>EQUIPMENT[x]).join(', '):''}<span class="learn">Техника ↗</span></span></button>${!b.locked?`<button class="swap" data-action="replace" data-block="${bi}" data-entry="${ei}" aria-label="Заменить ${esc(EX[it.ex].name)}">${icon('swap')}</button>`:''}</div>`).join('')}<div class="block-foot">${b.kind==='boxing'?`Между раундами ${clock(b.gap)}. Перед стартом — сигналы за 5 секунд.`:b.kind==='rope'?'Части выполняются подряд. Всего '+clock(blockDuration(b))+'.':b.locked?'Отжимания можно дробить 5 + 5. Ориентируйся на число кругов и повторов выше.':b.sets>1?`Отдых между кругами ${clock(b.rest)}${b.entries.length>1?` · между упражнениями ${clock(b.gap)}`:''}.`:'Нажми на название упражнения, чтобы открыть технику.'}</div></section>`).join('')}<button class="secondary" data-action="add-block" style="width:100%">${icon('plus')} Добавить упражнение / блок</button><p class="hint">Время силовых — оценка по повторениям и темпу. Таймер не завершает подход за тебя: сделал — нажми «Готово». Переходы между блоками уже учтены.</p>${planExplanationHTML(p)}`;
  $('bottom-action').innerHTML=`<button class="primary" data-action="start-plan">${icon('play')} Начать тренировку</button><small>≈ ${minutes(secs)} мин · техника и таймер внутри</small>`;
 }
-function filteredExercises(filter=libraryFilter,query=libraryQuery){return Object.values(EX).filter(ex=>(filter==='all'||ex.cat===filter)&&(!query||(`${ex.name} ${EX[ex.id].gear.map(x=>EQUIPMENT[x]).join(' ')} ${PATTERN[ex.pattern]}`).toLowerCase().includes(query.toLowerCase())));}
-function libraryRows(list,action='tech'){return list.map(ex=>`<button class="library-row" data-action="${action}" data-ex="${esc(ex.id)}"><span class="letter">${icon(ex.cat==='boxing'?'boxing':ex.cat==='strength'?'strength':ex.cat==='core'?'plan':'bolt')}</span><span><strong>${esc(ex.name)}</strong><small>${CATEGORY[ex.cat]} · ${ex.gear.length?ex.gear.map(g=>EQUIPMENT[g]).join(', '):'Без инвентаря'}${ex.source==='custom'?' · своё':''}</small></span><span class="arrow">↗</span></button>`).join('');}
+function filteredExercises(filter=libraryFilter,query=libraryQuery){return Object.values(EX).filter(ex=>(filter==='all'||ex.cat===filter)&&(!query||(`${ex.name} ${EX[ex.id].gear.map(x=>EQUIPMENT[x]).join(' ')} ${familyLabel(ex)}`).toLowerCase().includes(query.toLowerCase())));}
+function libraryRows(list,action='tech'){return list.map(ex=>`<button class="library-row" data-action="${action}" data-ex="${esc(ex.id)}"><span class="letter">${icon(ex.cat==='boxing'?'boxing':ex.cat==='strength'?'strength':ex.cat==='core'?'plan':'bolt')}</span><span><strong>${esc(ex.name)}</strong><small>${CATEGORY[ex.cat]} · ${esc(familyLabel(ex))} · ${esc(catalogStatus(ex))} · ${ex.gear.length?ex.gear.map(g=>EQUIPMENT[g]).join(', '):'Без инвентаря'}${ex.source==='custom'?' · своё':''}</small></span><span class="arrow">↗</span></button>`).join('');}
 function renderLibrary(){
  $('app').innerHTML=`<div class="hero"><div class="eyebrow">ТЕХНИКА БЕЗ ДОГАДОК</div><h1>Двигаться<br><em style="color:var(--accent);font-style:normal">осознанно.</em></h1><p class="sub">${Object.keys(EX).length} упражнений и боксерских заданий.<br>Как делать, частые ошибки, как облегчить.</p></div><input class="search" id="library-search" type="search" placeholder="Найти: тяга, пресс, гиря…" value="${esc(libraryQuery)}" aria-label="Найти упражнение"><div class="pills" style="margin-bottom:18px">${[['all','Все'],['boxing','Бокс'],['strength','Сила'],['core','Корпус'],['conditioning','Темп']].map(([k,l])=>`<button class="pill ${libraryFilter===k?'active':''}" data-action="library-filter" data-filter="${k}">${l}</button>`).join('')}</div><div id="library-results">${libraryRows(filteredExercises())||'<div class="empty">Ничего не найдено.</div>'}</div><p class="hint">Боксерские задания — варианты отработки уже знакомой техники, а не замена тренеру. Своё упражнение можно добавить в библиотеку и план вручную.</p>`;
  $('bottom-action').innerHTML=`<button class="primary" data-action="custom-exercise">${icon('plus')} Своё упражнение</button><small>Генератор использует только встроенные шаблоны</small>`;
@@ -366,13 +807,13 @@ function renderLibrary(){
 function dateText(raw){try{const d=new Date(raw);return isNaN(+d)?'Дата не указана':d.toLocaleDateString('ru-RU',{day:'numeric',month:'short'});}catch(_){return'Дата не указана';}}
 function renderHistory(){
  const h=state.history;
- $('app').innerHTML=`<div class="hero"><div class="eyebrow">СОХРАНЁННОЕ И ПРОГРЕСС</div><h1>Твои<br>тренировки.</h1><p class="sub">Хранятся в этом браузере. Без аккаунта<br>и без отправки тренировок на сервер.</p></div><div class="history-stats"><div class="card"><strong>${h.length}</strong><small>записанных сессий</small></div><div class="card"><strong>${minutes(h.reduce((a,x)=>a+x.elapsed,0))}</strong><small>минут фактической работы и отдыха</small></div></div><div class="section-label"><h2>Избранное</h2><span>${state.favorites.length}</span></div>${state.favorites.length?state.favorites.map(f=>`<div class="fav-card"><h3>${esc(f.name)}</h3><p>≈ ${minutes(duration(f.plan))} мин · ${TYPES[f.plan.config.type]} · ${EFFORT[f.plan.config.effort].name}</p><div class="actions"><button class="secondary" data-action="load-favorite" data-id="${esc(f.id)}">Открыть план</button><button class="text-button danger" data-action="delete-favorite" data-id="${esc(f.id)}">Удалить</button></div></div>`).join(''):'<div class="empty">Собери удачную тренировку и нажми «Сохранить» в плане.</div>'}<div class="section-label"><h2>История</h2><span>Сначала новые</span></div>${h.length?h.map(x=>`<div class="fav-card"><div class="eyebrow">${dateText(x.date)} · ${x.complete?'СЕССИЯ ЗАВЕРШЕНА':'ЗАВЕРШЕНА ДОСРОЧНО'}</div><h3>${esc(x.name)}</h3><p>${clock(x.elapsed)} фактически · ${x.rounds} раундов${x.rpe?` · усилие ${x.rpe}/10`:''}<br>Отжимания ${x.push} · приседания ${x.squat} · пресс ${x.abs}${x.note?`<br>${esc(x.note)}`:''}</p><div class="actions"><button class="secondary" data-action="repeat-history" data-id="${esc(x.id)}">Повторить план</button><button class="text-button danger" data-action="delete-history" data-id="${esc(x.id)}">Удалить</button></div></div>`).join(''):'<div class="empty"><h3>Первая сессия впереди</h3>После тренировки появятся время, выполненные повторения и твоя оценка усилия.</div>'}<div class="callout">История не считывает Apple Watch и не меняет нагрузку автоматически. Чтобы не потерять записи при очистке браузера, сохрани резервную копию.</div>`;
+ $('app').innerHTML=`<div class="hero"><div class="eyebrow">СОХРАНЁННОЕ И ПРОГРЕСС</div><h1>Твои<br>тренировки.</h1><p class="sub">Хранятся в этом браузере. Без аккаунта<br>и без отправки тренировок на сервер.</p></div>${recommendationHTML()}<div class="history-stats"><div class="card"><strong>${h.length}</strong><small>записанных сессий</small></div><div class="card"><strong>${minutes(h.reduce((a,x)=>a+x.elapsed,0))}</strong><small>минут фактической работы и отдыха</small></div></div><div class="section-label"><h2>Избранное</h2><span>${state.favorites.length}</span></div>${state.favorites.length?state.favorites.map(f=>`<div class="fav-card"><h3>${esc(f.name)}</h3><p>≈ ${minutes(duration(f.plan))} мин · ${TYPES[f.plan.config.type]} · ${EFFORT[f.plan.config.effort].name}</p><div class="actions"><button class="secondary" data-action="load-favorite" data-id="${esc(f.id)}">Открыть план</button><button class="text-button danger" data-action="delete-favorite" data-id="${esc(f.id)}">Удалить</button></div></div>`).join(''):'<div class="empty">Собери удачную тренировку и нажми «Сохранить» в плане.</div>'}<div class="section-label"><h2>История</h2><span>Сначала новые</span></div>${h.length?h.map(x=>`<div class="fav-card"><div class="eyebrow">${dateText(x.date)} · ${x.complete?'СЕССИЯ ЗАВЕРШЕНА':'ЗАВЕРШЕНА ДОСРОЧНО'}</div><h3>${esc(x.name)}</h3><p>${clock(x.elapsed)} фактически · ${x.rounds} раундов${x.rpe?` · усилие ${x.rpe}/10`:''}<br>Отжимания ${x.push} · приседания ${x.squat} · пресс ${x.abs}${x.note?`<br>${esc(x.note)}`:''}</p>${historyDetailsHTML(x)}<div class="actions"><button class="secondary" data-action="history-facts" data-id="${esc(x.id)}">Причина / усилие / заметка</button><button class="secondary" data-action="repeat-history" data-id="${esc(x.id)}">Повторить план</button><button class="text-button danger" data-action="delete-history" data-id="${esc(x.id)}">Удалить</button></div></div>`).join(''):'<div class="empty"><h3>Первая сессия впереди</h3>После тренировки появятся время, выполненные повторения и твоя оценка усилия.</div>'}<div class="callout">История не считывает Apple Watch и не меняет нагрузку автоматически. Чтобы не потерять записи при очистке браузера, сохрани резервную копию.</div>`;
  $('bottom-action').innerHTML='<button class="primary" data-action="export">Сохранить резервную копию</button><small>Планы, история, свои упражнения и настройки · JSON</small>';
 }
-function openSheet(title,body){$('sheet-title').textContent=title;$('sheet-body').innerHTML=body;$('sheet').querySelector('.sheet-head button').innerHTML=icon('close');if(!$('sheet').open)$('sheet').showModal();$('sheet').scrollTop=0;}
+function openSheet(title,body){if(sheetContext?.type==='recommendation')sheetContext=null;$('sheet-title').textContent=title;$('sheet-body').innerHTML=body;$('sheet').querySelector('.sheet-head button').innerHTML=icon('close');if(!$('sheet').open)$('sheet').showModal();$('sheet').scrollTop=0;}
 function closeSheet(){if($('sheet').open)$('sheet').close();sheetContext=null;}
-function tech(id){const ex=EX[id];if(!ex)return;const source=SOURCES[ex.source];openSheet('Техника упражнения',`<div class="tech-tag">${CATEGORY[ex.cat]} · ${PATTERN[ex.pattern]}</div><h2 class="tech-title">${esc(ex.name)}</h2><p class="tech-meta">${ex.gear.length?ex.gear.map(g=>EQUIPMENT[g]).join(' · '):'Собственный вес / без инвентаря'}${ex.side?' · обе стороны отдельно':''}</p><div class="steps">${ex.steps.map((s,i)=>`<div class="step"><b>${i+1}</b><div>${esc(s)}</div></div>`).join('')}</div><div class="tech-note">${esc(ex.cue)}</div><div class="tech-section"><h3>Не делай так</h3><p>${esc(ex.mistakes)}</p></div><div class="tech-ease"><div class="tech-section"><h3>Облегчить</h3><p>${esc(ex.easier)}</p></div><div class="tech-section"><h3>Усложнить</h3><p>${esc(ex.harder)}</p></div></div>${source?`<a class="source-link" href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.name)} ↗</a>`:`<p class="hint">${ex.source==='custom'?'Пользовательская карточка. Техника не проверена.':'Авторское тренировочное задание. Используй только технику, уже освоенную с тренером.'}</p>`}<p class="hint">Резкая боль — причина остановить упражнение, а не выполнить счётчик. Карточка объясняет движение, но не оценивает твоё выполнение.</p><button class="primary" data-action="close-sheet">Понятно</button>`);}
-function settings(){openSheet('Настройки',`<div class="tech-tag">РАУНД · ВЕРСИЯ 2.0</div><h2 class="tech-title">Звук, данные<br>и установка.</h2><label class="checkrow"><span>Звуки таймера<small>Гонг и сигналы за 5 секунд до старта.</small></span><input id="sound-setting" type="checkbox" ${state.sound?'checked':''}></label><div class="form-row" style="margin-top:17px"><label for="volume-setting">Громкость сигналов</label><input type="range" id="volume-setting" min="0" max="100" value="${state.volume}"></div><button class="secondary" data-action="test-sound" style="width:100%">${icon('sound')} Проверить звук</button><div class="tech-section"><h3>На iPhone как отдельное приложение</h3><p>Нужна опубликованная HTTPS-версия. В Safari: «Поделиться» → «На экран “Домой”» → включить «Открывать как веб-приложение» → «Добавить».</p></div><div class="callout ${location.protocol==='file:'?'warning':''}">${location.protocol==='file:'?'Сейчас открыт локальный файл, а не опубликованное приложение. Для установки нужен весь PWA-пакет на HTTPS-хостинге. Предпросмотр в «Файлах» может не выполнять JavaScript.':window.isSecureContext?'Защищённое соединение доступно. Можно добавить приложение на главный экран через Safari.':'Эта страница открыта без HTTPS. Установка и офлайн-кэш требуют защищённого адреса.'}<br><span id="offline-status">${'serviceWorker'in navigator&&navigator.serviceWorker.controller?'Офлайн-кэш активен.':'Офлайн-кэш ещё не подтверждён.'}</span></div><div class="tech-section"><h3>Экран и блокировка</h3><p>Приложение запрашивает удержание экрана включённым. Система может отказать. При блокировке, сворачивании или прерывании звука сессия ставится на паузу, а не продолжает раунд молча. На заблокированном iPhone фоновый гонг не гарантируется.</p></div><div class="tech-section"><h3>Сохранность данных</h3><p>${storageOK?'Данные сохраняются локально.':'Браузер не разрешает локальное сохранение.'} Здесь нет синхронизации между устройствами, Apple Health, трекинга пульса или серверного аккаунта. При смене адреса сайта история не переносится сама — используй экспорт / импорт.</p></div><div class="actions"><button class="secondary" data-action="export">Экспорт данных</button><button class="secondary" data-action="import">Импорт данных</button></div><button class="text-button" data-action="sources" style="width:100%;margin-top:15px">Методика и проверенные источники ↗</button>`);}
+function tech(id){const ex=EX[id];if(!ex)return;const source=SOURCES[ex.source];openSheet('Техника упражнения',`<div class="tech-tag">${CATEGORY[ex.cat]} · ${familyLabel(ex)}</div><h2 class="tech-title">${esc(ex.name)}</h2><p class="hint">${esc(catalogStatus(ex))}</p><p class="tech-meta">${ex.gear.length?ex.gear.map(g=>EQUIPMENT[g]).join(' · '):'Собственный вес / без инвентаря'}${ex.side?' · обе стороны отдельно':''}</p><div class="steps">${ex.steps.map((s,i)=>`<div class="step"><b>${i+1}</b><div>${esc(s)}</div></div>`).join('')}</div><div class="tech-note">${esc(ex.cue)}</div><div class="tech-section"><h3>Не делай так</h3><p>${esc(ex.mistakes)}</p></div><div class="tech-ease"><div class="tech-section"><h3>Облегчить</h3><p>${esc(ex.easier)}</p></div><div class="tech-section"><h3>Усложнить</h3><p>${esc(ex.harder)}</p></div></div>${source?`<a class="source-link" href="${esc(source.url)}" target="_blank" rel="noopener noreferrer">${esc(source.name)} ↗</a>`:`<p class="hint">${ex.source==='custom'?'Пользовательская карточка. Техника не проверена.':'Авторское тренировочное задание. Используй только технику, уже освоенную с тренером.'}</p>`}<p class="hint">Резкая боль — причина остановить упражнение, а не выполнить счётчик. Карточка объясняет движение, но не оценивает твоё выполнение.</p><button class="primary" data-action="close-sheet">Понятно</button>`);}
+function settings(){openSheet('Настройки',`<div class="tech-tag">РАУНД · ВЕРСИЯ 3.0</div><h2 class="tech-title">Звук, данные<br>и установка.</h2><label class="checkrow"><span>Звуки таймера<small>Гонг и сигналы за 5 секунд до старта.</small></span><input id="sound-setting" type="checkbox" ${state.sound?'checked':''}></label><div class="form-row" style="margin-top:17px"><label for="volume-setting">Громкость сигналов</label><input type="range" id="volume-setting" min="0" max="100" value="${state.volume}"></div><button class="secondary" data-action="test-sound" style="width:100%">${icon('sound')} Проверить звук</button><div class="tech-section"><h3>На iPhone как отдельное приложение</h3><p>Нужна опубликованная HTTPS-версия. В Safari: «Поделиться» → «На экран “Домой”» → включить «Открывать как веб-приложение» → «Добавить».</p></div><div class="callout ${location.protocol==='file:'?'warning':''}">${location.protocol==='file:'?'Сейчас открыт локальный файл, а не опубликованное приложение. Для установки нужен весь PWA-пакет на HTTPS-хостинге. Предпросмотр в «Файлах» может не выполнять JavaScript.':window.isSecureContext?'Защищённое соединение доступно. Можно добавить приложение на главный экран через Safari.':'Эта страница открыта без HTTPS. Установка и офлайн-кэш требуют защищённого адреса.'}<br><span id="offline-status">${'serviceWorker'in navigator&&navigator.serviceWorker.controller?'Офлайн-кэш активен.':'Офлайн-кэш ещё не подтверждён.'}</span></div><div class="tech-section"><h3>Экран и блокировка</h3><p>Приложение запрашивает удержание экрана включённым. Система может отказать. При блокировке, сворачивании или прерывании звука сессия ставится на паузу, а не продолжает раунд молча. На заблокированном iPhone фоновый гонг не гарантируется.</p></div><div class="tech-section"><h3>Сохранность данных</h3><p>${recoveryBlocked?'Автоматическое сохранение заблокировано: исходные данные не прочитаны.':storageOK?'Данные сохраняются локально.':'Сохранение недоступно: браузер отказал в записи.'} Здесь нет синхронизации между устройствами, Apple Health, трекинга пульса или серверного аккаунта. При смене адреса сайта история не переносится сама — используй экспорт / импорт.</p></div><div class="actions"><button class="secondary" data-action="export">Экспорт данных</button><button class="secondary" data-action="import">Импорт данных</button></div><button class="text-button" data-action="sources" style="width:100%;margin-top:15px">Методика и проверенные источники ↗</button>`);}
 function howBuilder(){openSheet('Как собирается план',`<h2 class="tech-title">Не случайный<br>набор упражнений.</h2><div class="steps">${[
  'Сначала резервируются обязательные блоки, разогрев и заминка. Отдых и смена сторон включены во время.',
  'Затем добавляются боксерские раунды, силовые пары, корпус и финишер в зависимости от типа и акцента.',
@@ -381,25 +822,29 @@ function howBuilder(){openSheet('Как собирается план',`<h2 clas
  'Тень стоит до утомляющей силовой части; Burn Machine — в конце. Баллистические движения с гирей в генерацию не входят.',
  'План можно менять вручную. После правок длительность и обязательные объёмы пересчитываются.'
  ].map((s,i)=>`<div class="step"><b>${i+1}</b><div>${s}</div></div>`).join('')}</div><div class="callout">Это локальный конструктор на правилах и авторских шаблонах, а не нейросеть с медицинской оценкой и не полноценная периодизация. «Силовая» с гирей 12 кг и гантелями 5 кг не равна тренировке максимальной силы.</div><button class="primary" data-action="close-sheet">К тренировке</button>`);}
-function sources(){openSheet('Методика и источники',`<p class="sub">Тексты карточек и дозировки составлены для этого приложения. Источники ниже помогают проверить принципы и базовые движения; они не подтверждают персональную пригодность каждой тренировки.</p><div class="callout">ACSM: работа до отказа не обязательна для большинства здоровых взрослых; программу и нагрузку нужно выбирать под цель. Здесь заданные секунды, повторения и порядок блоков — авторские настройки, не цитата из рекомендаций.</div>${Object.values(SOURCES).map(s=>`<a class="source-link" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.name)} ↗</a>`).join('')}<p class="hint">Проверка ссылок и документации: 16 октября 2026. Силовые справочники: ACE; общие принципы: ACSM. Боксерские задания — для отработки уже знакомых движений. Нет датчика пульса, камеры или автоматической проверки техники.</p>`);}
+function sources(){openSheet('Методика и источники',`<p class="sub">Тексты карточек и дозировки составлены для этого приложения. Источники ниже помогают проверить принципы и базовые движения; они не подтверждают персональную пригодность каждой тренировки.</p><div class="callout">ACSM: работа до отказа не обязательна для большинства здоровых взрослых; программу и нагрузку нужно выбирать под цель. Здесь заданные секунды, повторения и порядок блоков — авторские настройки, не цитата из рекомендаций.</div>${Object.values(SOURCES).map(s=>`<a class="source-link" href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.name)} ↗</a>`).join('')}<p class="hint">Наличие ссылки не означает, что каждая новая страница прочитана целиком или карточка одобрена экспертом. Новые непроверенные карточки доступны только вручную. Силовые справочники: ACE; общие принципы: ACSM. Боксерские задания — для отработки уже знакомых движений. Нет датчика пульса, камеры или автоматической проверки техники.</p>`);}
 function editBlock(bi){const b=state.plan?.blocks[bi];if(!b)return;sheetContext={type:'edit',bi};openSheet('Изменить блок',`<div class="form-row"><label for="edit-title">Название блока</label><input id="edit-title" value="${esc(b.title)}" maxlength="80"></div>${b.locked?'<div class="callout">Блок закреплён как 50 + 50. Изменение повторений или кругов изменит эту цель — в плане появится предупреждение.</div>':''}<div class="two-inputs"><div class="form-row"><label for="edit-sets">Кругов</label><input id="edit-sets" type="number" inputmode="numeric" min="1" max="8" value="${b.sets}" ${b.kind==='boxing'?'disabled':''}></div><div class="form-row"><label for="edit-rest">Отдых между кругами, сек</label><input id="edit-rest" type="number" inputmode="numeric" min="0" max="180" value="${b.rest}"></div></div><div class="form-row"><label for="edit-gap">${b.kind==='boxing'?'Отдых между раундами':'Переход между упражнениями'}, сек</label><input id="edit-gap" type="number" inputmode="numeric" min="0" max="120" value="${b.gap}"></div>${b.entries.map((it,i)=>`<div class="edit-entry"><strong>${esc(EX[it.ex].name)}${EX[it.ex].side?' · на сторону':''}</strong><div class="entry-inputs"><input aria-label="Объём ${esc(EX[it.ex].name)}" data-edit-value="${i}" type="number" inputmode="numeric" min="1" max="${it.mode==='time'?900:100}" value="${it.value}"><select aria-label="Единица объёма" data-edit-mode="${i}"><option value="reps" ${it.mode==='reps'?'selected':''}>повторений</option><option value="time" ${it.mode==='time'?'selected':''}>секунд</option></select></div></div>`).join('')}<div class="sheet-error" id="edit-error"></div><button class="primary" data-action="apply-edit">Сохранить изменения</button><div class="actions" style="margin-top:10px"><button class="secondary" data-action="move-block" data-dir="-1">↑ Выше</button><button class="secondary" data-action="move-block" data-dir="1">↓ Ниже</button><button class="text-button danger" data-action="delete-block">Удалить блок</button></div>`);sheetContext={type:'edit',bi};}
-function applyEdit(){const ctx=sheetContext;if(ctx?.type!=='edit')return;const b=state.plan.blocks[ctx.bi];const sets=Number($('edit-sets').value),rest=Number($('edit-rest').value),gap=Number($('edit-gap').value);
+function applyEdit(){const ctx=sheetContext;if(ctx?.type!=='edit')return;const b=state.plan.blocks[ctx.bi];const before=clone(state.plan);const sets=Number($('edit-sets').value),rest=Number($('edit-rest').value),gap=Number($('edit-gap').value);
  if(!Number.isInteger(sets)||sets<1||sets>8||!Number.isFinite(rest)||rest<0||rest>180||!Number.isFinite(gap)||gap<0||gap>120){$('edit-error').textContent='Проверь числа: 1–8 кругов, отдых 0–180 сек, переход 0–120 сек.';return;}
  const entries=b.entries.map((e,i)=>({...e,value:Number(document.querySelector(`[data-edit-value="${i}"]`).value),mode:document.querySelector(`[data-edit-mode="${i}"]`).value}));
  if(entries.some(e=>!Number.isFinite(e.value)||e.value<1||e.value>(e.mode==='time'?900:100)||!Number.isInteger(e.value))){$('edit-error').textContent='Укажи целое число: 1–100 повторов или 1–900 секунд.';return;}
  if(b.kind==='boxing'&&(entries.some(e=>e.mode!=='time'||e.value!==180)||gap!==60)){
   if(!confirm('Это изменит стандартные раунды 3 минуты / 1 минута. Продолжить?'))return;b.title='Бой с тенью · свой интервал';
  }else b.title=$('edit-title').value.trim()||b.title;
- Object.assign(b,{sets,rest,gap,entries});edited();closeSheet();}
-function edited(){state.plan.edited=true;state.plan.estimated=duration(state.plan);persist();view='plan';render();}
-function openReplace(bi,ei){const b=state.plan.blocks[bi],old=EX[b.entries[ei].ex];const list=Object.values(EX).filter(e=>e.id!==old.id&&e.pattern===old.pattern&&canUse(e,state.plan.config));sheetContext={type:'replace',bi,ei};openSheet('Заменить упражнение',`<p class="sub">Вместо «${esc(old.name)}» — движение того же типа. Только доступный в плане инвентарь.</p>${libraryRows(list,'choose-replacement')||'<div class="empty">Другого подходящего движения с этим инвентарём пока нет. Можно изменить план или добавить свой блок.</div>'}`);sheetContext={type:'replace',bi,ei};}
-function addBlockSheet(){if(!state.plan){toast('Сначала собери план.');return;}sheetContext={type:'add'};openSheet('Добавить в тренировку',`<p class="sub">Будет добавлен отдельный блок: два подхода, затем можно изменить объём. Только выбранный инвентарь.</p>${libraryRows(Object.values(EX).filter(e=>!['warm','cool'].includes(e.cat)&&canUse(e,state.plan.config)),'choose-add')}`);sheetContext={type:'add'};}
+ explanationPreviousPlan=before;Object.assign(b,{sets,rest,gap,entries});edited();closeSheet();}
+function edited(){state.plan.notes=[];state.plan.edited=true;state.plan.estimated=duration(state.plan);persist();view='plan';render();}
+function openReplace(bi,ei){const b=state.plan.blocks[bi],old=EX[b.entries[ei].ex];const list=Object.values(EX).filter(e=>e.id!==old.id&&catalogCanReplace(old.id,e.id)&&manualAllowed(e.id));sheetContext={type:'replace',bi,ei};openSheet('Заменить упражнение',`<p class="sub">Вместо «${esc(old.name)}» — движение того же типа. Только доступный в плане инвентарь.</p>${libraryRows(list,'choose-replacement')||'<div class="empty">Другого подходящего движения с этим инвентарём пока нет. Можно изменить план или добавить свой блок.</div>'}`);sheetContext={type:'replace',bi,ei};}
+function addBlockSheet(){if(!state.plan){toast('Сначала собери план.');return;}sheetContext={type:'add'};openSheet('Добавить в тренировку',`<p class="sub">Будет добавлен отдельный блок: два подхода, затем можно изменить объём. Только выбранный инвентарь.</p>${libraryRows(Object.values(EX).filter(e=>!['warm','cool'].includes(e.cat)&&manualAllowed(e.id)),'choose-add')}`);sheetContext={type:'add'};}
 function customExercise(){openSheet('Своё упражнение',`<p class="sub">Попадёт в библиотеку и ручное добавление. Генератор не назначает непроверенные пользовательские движения автоматически.</p><div class="form-row"><label for="custom-name">Название</label><input id="custom-name" maxlength="80" placeholder="Например: упражнение от тренера"></div><div class="two-inputs"><div class="form-row"><label for="custom-cat">Раздел</label><select id="custom-cat"><option value="strength">Силовые</option><option value="core">Пресс и корпус</option><option value="conditioning">Выносливость</option><option value="boxing">Бокс</option></select></div><div class="form-row"><label for="custom-pattern">Тип движения</label><select id="custom-pattern">${Object.entries(PATTERN).filter(([k])=>!['warm','cool'].includes(k)).map(([k,l])=>`<option value="${k}">${l}</option>`).join('')}</select></div></div><div class="two-inputs"><div class="form-row"><label for="custom-value">Объём подхода</label><input type="number" id="custom-value" min="1" max="600" inputmode="numeric" value="10"></div><div class="form-row"><label for="custom-mode">Единица</label><select id="custom-mode"><option value="reps">Повторения</option><option value="time">Секунды</option></select></div></div><div class="form-row"><label for="custom-gear">Инвентарь</label><select id="custom-gear"><option value="">Без инвентаря</option>${Object.entries(EQUIPMENT).map(([k,l])=>`<option value="${k}">${l}</option>`).join('')}</select></div><label class="checkrow"><span>Каждая сторона отдельно</span><input id="custom-side" type="checkbox"></label><div class="form-row" style="margin-top:18px"><label for="custom-steps">Как выполнять — каждый шаг с новой строки</label><textarea id="custom-steps" maxlength="2000" placeholder="Исходное положение…&#10;Движение…&#10;Что контролировать…"></textarea></div><div class="sheet-error" id="custom-error"></div><button class="primary" data-action="save-custom">Добавить упражнение</button>`);}
 function saveCustom(){const name=$('custom-name').value.trim(),steps=$('custom-steps').value.split('\n').map(s=>s.trim()).filter(Boolean),val=Number($('custom-value').value),mode=$('custom-mode').value;
  if(!name||!steps.length||!Number.isInteger(val)||val<1||val>(mode==='reps'?50:600)){$('custom-error').textContent='Нужны название, инструкция и корректный объём: 1–50 повторов или 1–600 секунд.';return;}
  const gear=$('custom-gear').value,ex=customFrom({id:'custom-'+Date.now().toString(36),name,steps,value:val,mode,cat:$('custom-cat').value,pattern:$('custom-pattern').value,side:$('custom-side').checked,gear:gear?[gear]:[],cue:steps[0]});EX[ex.id]=ex;state.custom.push(ex);persist();closeSheet();view='library';libraryFilter='all';libraryQuery='';render();toast('Упражнение добавлено.');}
-function exportData(){const blob=new Blob([JSON.stringify({format:'round-backup',version:2,exported:new Date().toISOString(),...state,session:state.session?{...state.session,steps:undefined,running:false}:null},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='round-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);toast('Резервная копия подготовлена.');}
-async function importData(file){if(!file)return;if(file.size>5000000){toast('Файл слишком большой. Максимум 5 МБ.');return;}try{const data=JSON.parse(await file.text());if(data.format!=='round-backup'||data.version!==2)throw Error('Неверный формат');const prepared=prepareState(data);if(!confirm('Заменить текущие планы, историю и настройки данными из резервной копии?'))return;if(state.session)pauseSession();commitState(prepared);persist();closeSheet();render();toast('Данные восстановлены.');}catch(_){toast('Не удалось прочитать резервную копию Раунд v2.');}}
+function exportData(){const blob=new Blob([JSON.stringify({...storagePayload(state),format:'round-backup',version:3,exported:new Date().toISOString()},null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='round-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);toast('Резервная копия подготовлена.');}
+async function importData(file){if(!file)return;if(file.size>5000000){toast('Файл слишком большой. Максимум 5 МБ.');return;}let prepared;try{const data=JSON.parse(await file.text());if(data?.format!=='round-backup'||![2,3].includes(data.version))throw Error('Неверный формат');prepared=prepareState(data);const serialized=JSON.stringify(storagePayload(prepared.state));if(!confirm('Заменить текущие планы, историю и настройки данными из резервной копии?'))return;
+ // localStorage.setItem is atomic. A denied write must not pause the live timer.
+ localStorage.setItem(KEY,serialized);
+ }catch(_){toast('Не удалось восстановить резервную копию Раунд v2/v3. Текущие данные не изменены.');return;}
+ audio.cancel();releaseWake();commitState(prepared);recommendationUndo=null;explanationPreviousPlan=null;recoveryBlocked=false;storageOK=true;pendingSummary=null;closeSheet();$('player').hidden=true;document.body.style.overflow='';render();toast('Данные восстановлены.');}
 /* Audio: generated locally; no network audio assets. Every scheduled node is
    cancelled on pause so a paused session cannot emit future countdowns. */
 const audio={ctx:null,master:null,nodes:new Set(),events:[],
@@ -421,7 +866,7 @@ function scheduleSounds(transition=false,previous=null){audio.cancel();const s=s
  if(it.mode==='time'&&['rest','prep'].includes(it.kind)){const rem=secondsRemaining(),next=s.steps[s.index+1];if(next&&next.kind!=='rest'){for(let n=5;n>=1;n--)if(n<=rem+.025)audio.beep(n,Math.max(0,rem-n));}}
 }
 function syncElapsed(now=performance.now()){const s=state.session;if(!s?.running)return;const dt=Math.max(0,(now-lastTick)/1000);s.elapsed+=dt;s.stepElapsed+=dt;lastTick=now;if(curr().mode==='time')s.remaining=Math.max(0,(deadline-now)/1000);}
-async function startPlan(p){if(startBusy)return;startBusy=true;try{if(state.session&&!confirm('Заменить незавершённую сессию новой? Текущий прогресс не будет записан.'))return;if(state.session)pauseSession();closeSheet();const plan=validPlan(p);if(!plan)throw Error('Некорректный план');const steps=compile(plan);state.session={id:'s-'+Date.now().toString(36),plan,steps,index:0,running:false,remaining:steps[0].seconds,elapsed:0,stepElapsed:0,target:0,logs:{},started:new Date().toISOString(),notice:''};$('player').hidden=false;document.body.style.overflow='hidden';paintPlayer(true);const ok=await audio.unlock();if(!ok&&state.sound){state.session.notice='Звук не включился. Нажми «Продолжить» или выключи звук кнопкой сверху.';paintPlayer(true);persist();return;}runSession(true); }catch(e){toast(e.message||'Не удалось запустить.');}finally{startBusy=false;}}
+async function startPlan(p){if(startBusy)return;startBusy=true;try{if(state.session&&!confirm('Заменить незавершённую сессию новой? Текущий прогресс не будет записан.'))return;if(state.session)pauseSession();closeSheet();const plan=validPlan(p);if(!plan)throw Error('Некорректный план');const steps=compile(plan);state.session={id:'s-'+Date.now().toString(36),plan,steps,profileSnapshot:normalizeProfile(state.profile),index:0,running:false,remaining:steps[0].seconds,elapsed:0,stepElapsed:0,target:0,logs:{},started:new Date().toISOString(),notice:''};$('player').hidden=false;document.body.style.overflow='hidden';paintPlayer(true);const ok=await audio.unlock();if(!ok&&state.sound){state.session.notice='Звук не включился. Нажми «Продолжить» или выключи звук кнопкой сверху.';paintPlayer(true);persist();return;}runSession(true); }catch(e){toast(e.message||'Не удалось запустить.');}finally{startBusy=false;}}
 function runSession(transition=false){const s=state.session;if(!s||s.running)return;s.running=true;s.notice='';lastTick=performance.now();deadline=lastTick+s.remaining*1000;scheduleSounds(transition);requestWake();persist();paintPlayer(true);}
 async function resumeSession(){if(!state.session||startBusy)return;startBusy=true;try{$('player').hidden=false;document.body.style.overflow='hidden';paintPlayer(true);const ok=await audio.unlock();if(!ok&&state.sound){state.session.notice='Не удалось включить звук. Проверь разрешения или выключи звук.';paintPlayer(true);return;}runSession(false);}finally{startBusy=false;}}
 function pauseSession(reason='На паузе.'){const s=state.session;if(!s)return;if(s.running)syncElapsed();s.running=false;s.notice=reason;audio.cancel();releaseWake();persist();paintPlayer(true);}
@@ -432,10 +877,13 @@ function skipStep(){if(!state.session)return;completeStep('skipped');}
 function previousStep(){const s=state.session;if(!s||s.index<=0)return;syncElapsed();const idx=s.index-1;delete s.logs[idx];delete s.logs[s.index];enterIndex(idx,s.running,null);}
 function extraRest(){const s=state.session;if(!s||curr().kind!=='rest')return;syncElapsed();s.remaining+=30;deadline=performance.now()+s.remaining*1000;scheduleSounds(false);persist();paintPlayer(true);}
 function playerNextText(){const s=state.session;if(!s)return'';const n=s.steps[s.index+1];if(!n)return'Финиш и сохранение результата';if(n.kind==='rest'){const n2=s.steps.slice(s.index+2).find(x=>x.kind!=='rest');return `${clock(n.seconds)} отдыха${n2?' → '+n2.title:''}`;}return n.title+(n.mode==='reps'?` · ${n.reps} повт.`:` · ${clock(n.seconds)}`);}
+function isShadowStep(step){return !!step?.ex&&!['rest','prep'].includes(step.kind)&&catalogMeta(step.ex).family==='shadow';}
+function playerRoundInfo(s,it){const rounds=s.steps.filter(x=>isShadowStep(x)&&x.blockId===it.blockId&&x.set===it.set);return {round:rounds.indexOf(it)+1,total:rounds.length};}
 function paintPlayer(force=false){const s=state.session,it=curr();if(!s||!it)return;const now=performance.now();if(!force&&now-lastPaint<100)return;lastPaint=now;
- const phase=it.kind==='rest'?'var(--blue)':it.kind==='boxing'?'var(--orange)':it.kind==='core'?'#b9ace1':'var(--accent)';$('player').style.setProperty('--phase',phase);
- $('player-block').textContent=it.block;$('player-step').textContent=`Этап ${s.index+1} / ${s.steps.length}${it.info?' · '+it.info:''}`;
- $('phase-name').textContent=it.kind==='rest'?'Отдых':it.kind==='prep'?'Подготовка':it.kind==='boxing'?`Раунд ${it.round} / ${it.rounds}`:it.kind==='rope'?'Скакалка':it.kind==='cool'?'Заминка':it.kind==='warm'?'Разогрев':it.mode==='reps'?'Силовой подход':'Рабочий интервал';
+ const shadow=isShadowStep(it),round=shadow?playerRoundInfo(s,it):null,info=shadow?`Раунд ${round.round} из ${round.total}`:it.kind==='boxing'?`${it.sets>1?`Круг ${it.set} из ${it.sets}`:''}${it.side?' · '+it.side:''}`.replace(/^ · /,''):it.info;
+ const phase=it.kind==='rest'?'var(--blue)':shadow?'var(--orange)':it.kind==='core'?'#b9ace1':'var(--accent)';$('player').style.setProperty('--phase',phase);
+ $('player-block').textContent=it.block;$('player-step').textContent=`Этап ${s.index+1} / ${s.steps.length}${info?' · '+info:''}`;
+ $('phase-name').textContent=it.kind==='rest'?'Отдых':it.kind==='prep'?'Подготовка':shadow?`Раунд ${round.round} / ${round.total}`:it.kind==='rope'?'Скакалка':it.kind==='cool'?'Заминка':it.kind==='warm'?'Разогрев':it.mode==='reps'?'Силовой подход':'Рабочий интервал';
  const rep=it.mode==='reps';$('clock').classList.toggle('reps',rep);$('clock').textContent=rep?String(s.target):clock(secondsRemaining());
  $('clock-unit').textContent=rep?`повторений${it.side?' · '+it.side:''} · на подход ${clock(s.stepElapsed)}`:(it.side||(!s.running?'На паузе':'Осталось'));
  $('current-ex').textContent=it.title;$('player-cue').textContent=it.cue;
@@ -447,17 +895,23 @@ function paintPlayer(force=false){const s=state.session,it=curr();if(!s||!it)ret
 }
 function tick(){const s=state.session;if(!s?.running)return;const now=performance.now();if(now-lastTick>3000){pauseSession('Браузер задержал выполнение. Сессия на паузе — продолжи вручную.');return;}syncElapsed(now);if(curr().mode==='time'&&s.remaining<=0){const prev=curr(),end=deadline;logStep('done');enterIndex(s.index+1,true,prev,end);}else paintPlayer();if(now-lastSave>3000){persist();lastSave=now;}}
 setInterval(tick,80);
-function showSummary(){if(!pendingSummary)return;const h=pendingSummary;openSheet('Результат тренировки',`<div class="tech-tag">${h.complete?'СЕССИЯ ЗАВЕРШЕНА':'ЗАВЕРШЕНО ДОСРОЧНО'}</div><div class="summary-success">${clock(h.elapsed)}</div><p class="sub">Фактическое время без пауз приложения.<br>${h.done} из ${h.total} рабочих этапов отмечены выполненными.</p><div class="quota-badges"><span>Тень ${h.rounds} раундов</span><span>Отжимания ${h.push}</span><span>Приседания ${h.squat}</span><span>Пресс ${h.abs}</span></div><h3>Насколько тяжело было?</h3><p class="hint">1 — почти без усилий. 10 — предел. Можно не оценивать.</p><div class="rating">${Array.from({length:10},(_,i)=>`<button data-action="rate" data-value="${i+1}" class="${selectedRating===i+1?'active':''}">${i+1}</button>`).join('')}</div><div class="form-row"><label for="summary-note">Заметка</label><textarea id="summary-note" maxlength="1000" placeholder="Что получилось, где нужно изменить нагрузку…">${esc(h.note||'')}</textarea></div><button class="primary" data-action="save-summary">Сохранить тренировку</button><p class="hint">Результат уже сохранён без оценки. Закрытие окна не удалит сессию.</p>`);}
-function finishSession(complete){const s=state.session;if(!s)return;if(s.running)syncElapsed();s.running=false;audio.cancel();audio.gong(true);releaseWake();const work=s.steps.filter(x=>!['rest','prep'].includes(x.kind));let done=0,push=0,squat=0,abs=0,rounds=0;for(const [idx,l]of Object.entries(s.logs)){const x=s.steps[Number(idx)];if(!x||l?.status!=='done')continue;if(!['rest','prep'].includes(x.kind))done++;if(x.tag==='push')push+=Number(l.reps)||0;if(x.tag==='squat')squat+=Number(l.reps)||0;if(x.tag==='abs')abs+=Number(l.reps)||0;if(x.kind==='boxing'&&x.ex)rounds++;}
- pendingSummary={id:s.id,name:s.plan.title,date:new Date().toISOString(),elapsed:s.elapsed,complete,done,total:work.length,push,squat,abs,rounds,rpe:0,note:'',plan:clone(s.plan)};state.history.unshift(pendingSummary);state.history=state.history.slice(0,200);state.session=null;selectedRating=0;persist();$('player').hidden=true;document.body.style.overflow='';view='history';render();showSummary();}
+function showSummary(){if(!pendingSummary)return;const h=pendingSummary;openSheet('Результат тренировки',`<div class="tech-tag">${h.complete?'СЕССИЯ ЗАВЕРШЕНА':'ЗАВЕРШЕНО ДОСРОЧНО'}</div><div class="summary-success">${clock(h.elapsed)}</div><p class="sub">Фактическое время без пауз приложения.<br>${h.done} из ${h.total} рабочих этапов отмечены выполненными.</p><div class="quota-badges"><span>Тень ${h.rounds} раундов</span><span>Отжимания ${h.push}</span><span>Приседания ${h.squat}</span><span>Пресс ${h.abs}</span></div><div class="form-row"><label for="summary-reason">Причина остановки (необязательно)</label><select id="summary-reason">${Object.entries(STOP_REASONS).map(([k,label])=>`<option value="${k}" ${(h.stopReason||'unknown')===k?'selected':''}>${esc(label)}</option>`).join('')}</select></div><p class="hint">Без ответа причина остаётся неизвестной. Боль — остановка и пересмотр, не подбор замены. Подробности подходов здесь не восстанавливаются.</p><h3>Насколько тяжело было?</h3><p class="hint">1 — почти без усилий. 10 — предел. Можно не оценивать.</p><div class="rating">${Array.from({length:10},(_,i)=>`<button data-action="rate" data-value="${i+1}" class="${selectedRating===i+1?'active':''}">${i+1}</button>`).join('')}</div><div class="form-row"><label for="summary-note">Заметка</label><textarea id="summary-note" maxlength="1000" placeholder="Что получилось, где нужно изменить нагрузку…">${esc(h.note||'')}</textarea></div><button class="primary" data-action="save-summary">Сохранить тренировку</button>${storageOK?'<p class="hint">Результат уже сохранён без оценки. Закрытие окна не удалит сессию.</p>':'<div role="alert"><p class="hint">Результат только в памяти этой вкладки — на устройстве он не сохранён. Перезагрузка или закрытие вкладки могут удалить его. Скачай резервную копию до закрытия.</p><button class="secondary" data-action="export">Скачать резервную копию</button></div>'}`);}
+function finishSession(complete){const s=state.session;if(!s)return;if(s.running)syncElapsed();s.running=false;audio.cancel();audio.gong(true);releaseWake();const work=s.steps.filter(x=>!['rest','prep'].includes(x.kind));let done=0,push=0,squat=0,abs=0,rounds=0;for(const [idx,l]of Object.entries(s.logs)){const x=s.steps[Number(idx)];if(!x||l?.status!=='done')continue;if(!['rest','prep'].includes(x.kind))done++;if(x.tag==='push')push+=Number(l.reps)||0;if(x.tag==='squat')squat+=Number(l.reps)||0;if(x.tag==='abs')abs+=Number(l.reps)||0;if(isShadowStep(x))rounds++;}
+ pendingSummary={id:s.id,name:s.plan.title,date:new Date().toISOString(),elapsed:s.elapsed,complete,done,total:work.length,push,squat,abs,rounds,rpe:0,note:'',plan:clone(s.plan),detailsKnown:true,steps:collectSessionResults(s),catalogVersion:3,stopReason:'unknown',...(s.profileSnapshot===undefined?{}:{profileSnapshot:normalizeProfile(s.profileSnapshot)})};state.history.unshift(pendingSummary);state.history=state.history.slice(0,200);state.session=null;selectedRating=0;persist();$('player').hidden=true;document.body.style.overflow='';view='history';render();showSummary();}
 function roundTimerSheet(){openSheet('Только раунды',`<h2 class="tech-title">3 минуты работы.<br>1 минута отдыха.</h2><p class="sub">Бой с тенью без силовых блоков. 5 секунд подготовки, гонг и обратный отсчёт перед каждым стартом.</p><div class="form-row"><label for="round-count">Количество раундов</label><select id="round-count">${Array.from({length:12},(_,i)=>`<option ${i===2?'selected':''} value="${i+1}">${i+1}</option>`).join('')}</select></div><button class="secondary" style="width:100%;margin-bottom:12px" data-action="test-sound">Проверить звук</button><button class="primary" data-action="start-rounds">${icon('play')} Запустить раунды</button>`);}
-function makeRounds(n){return{version:2,title:`Бой с тенью · ${n} раундов`,config:{...clone(state.config),must:{rope:false,shadow:false,quota:false,abs:false}},seed:1,notes:[],created:new Date().toISOString(),blocks:[block('boxing','Бой с тенью · 3 / 1','boxing',Array.from({length:n},(_,i)=>entry(['box-base','box-defense','box-flow','box-exit'][i%4],{value:180})),1,0,60)]};}
-function generateUI(usePlan=false){if(state.session&&!confirm('Есть незавершённая сессия. Сбросить её и собрать новую тренировку?'))return;if(state.session){pauseSession();state.session=null;}
- const cfg=usePlan&&state.plan?state.plan.config:state.config;const p=generate(cfg,Date.now());if(p.error){if(view!=='build'){view='build';state.config=clone(cfg);render();}const min=p.minimum?Math.ceil(p.minimum/60):0;const next=[30,45,60,75,90].find(n=>n>=min);$('build-error').innerHTML=`<div class="error" role="alert">${esc(p.error)}${min&&next?`<button class="secondary" style="width:100%;margin-top:12px" data-action="fit-minimum" data-value="${next}">Поставить ${next} минут</button>`:''}</div>`;$('build-error').scrollIntoView({behavior:'smooth',block:'center'});return;}
- state.plan=p;state.config=clone(p.config);persist();view='plan';render();window.scrollTo(0,0);if(!storageOK)toast('Браузер не разрешает сохранять данные.');}
+function makeRounds(n){return{version:2,title:`Бой с тенью · ${n} раундов`,config:{...clone(state.config),must:{rope:false,shadow:false,quota:false,abs:false}},seed:1,notes:[],created:new Date().toISOString(),blocks:[block('boxing','Бой с тенью · 3 / 1','boxing',Array.from({length:n},(_,i)=>entry(['box-base','box-defense','box-double','box-exit'][i%4],{value:180})),1,0,60)]};}
+function generateUI(usePlan=false){
+ const cfg=usePlan&&state.plan?state.plan.config:state.config;let staged;
+ try{staged=generate(cfg,Date.now(),{profile:state.profile,history:state.history,previousPlan:usePlan?state.plan:null});if(staged.error)throw Error(staged.error);const safe=validPlan(staged);if(!safe)throw Error('Некорректный план');}catch(e){let r;try{r=builderPreflight(cfg);}catch(_){r={ok:false,minimum:null,conflicts:[]};}if(view==='build'){$('build-error').innerHTML=`<div class="error" role="alert">${esc(e.message||'Не удалось собрать план')}</div>`+preflightHTML(r,true);}else openSheet('План не изменён',`<div class="error" role="alert">${esc(e.message||'Не удалось собрать план')}</div>${preflightHTML(r)}<button class="secondary" data-action="close-sheet">Закрыть</button>`);return false;}
+ if(usePlan&&state.plan){const ids=p=>[...new Set(p.blocks.flatMap(b=>b.entries.map(e=>e.ex)))].sort().join('|');if(ids(staged)===ids(state.plan)){toast('Свободы изменить допустимый состав в этом бюджете не найдено. Текущий план и сессия сохранены.');return false;}}
+ if(state.session&&!confirm('Есть незавершённая сессия. Заменить её новым планом? Текущий прогресс не будет записан.'))return false;
+ if(state.session){pauseSession();state.session=null;$('player').hidden=true;document.body.style.overflow='';}
+ explanationPreviousPlan=clone(state.plan);state.plan=staged;state.config=clone(staged.config);persist();view='plan';render();window.scrollTo(0,0);if(!storageOK)toast('Сохранение недоступно. Изменения только в памяти.');return true;}
 /* Event delegation keeps every view replaceable and keyboard-accessible. */
 document.addEventListener('click',async ev=>{
  const b=ev.target.closest('[data-action]');if(!b||b.disabled)return;const a=b.dataset.action;
+ if(a==='preview-recommendation'){previewRecommendationUI(b.dataset.id);return;}if(a==='accept-recommendation'){acceptRecommendation();return;}if(a==='reject-recommendation'){rejectRecommendation();return;}if(a==='undo-recommendation'){undoRecommendation();return;}if(a==='history-facts'){historyFacts(b.dataset.id);return;}
+ if(a==='profile'){profileSheet();return;}if(a==='save-profile'){saveProfileForm();return;}if(a==='preset'){previewPreset(b.dataset.preset);return;}if(a==='apply-preset'){applyPreset();return;}
  if(a==='view'){view=b.dataset.view;render();window.scrollTo(0,0);return;}
  if(a==='config'){const opened=$('advanced-builder')?.open;const k=b.dataset.key;state.config[k]=['minutes','effort'].includes(k)?Number(b.dataset.value):b.dataset.value;persist();renderBuilder();if(opened)$('advanced-builder').open=true;return;}
  if(a==='gear'){const opened=$('advanced-builder')?.open;const g=b.dataset.value;state.config.gear=state.config.gear.includes(g)?state.config.gear.filter(x=>x!==g):[...state.config.gear,g];persist();renderBuilder();if(opened)$('advanced-builder').open=true;return;}
@@ -466,19 +920,20 @@ document.addEventListener('click',async ev=>{
  if(a==='settings'){settings();return;}if(a==='close-sheet'){closeSheet();return;}if(a==='tech'){tech(b.dataset.ex);return;}if(a==='sources'){sources();return;}if(a==='how-builder'){howBuilder();return;}
  if(a==='library-filter'){libraryFilter=b.dataset.filter;renderLibrary();return;}
  if(a==='edit-block'){editBlock(Number(b.dataset.index));return;}if(a==='apply-edit'){applyEdit();return;}
- if(a==='move-block'&&sheetContext?.type==='edit'){const i=sheetContext.bi,j=i+Number(b.dataset.dir);if(j<0||j>=state.plan.blocks.length)return;[state.plan.blocks[i],state.plan.blocks[j]]=[state.plan.blocks[j],state.plan.blocks[i]];edited();closeSheet();toast('Порядок изменён. Проверь, что разминка осталась в начале.');return;}
- if(a==='delete-block'&&sheetContext?.type==='edit'){if(state.plan.blocks.length<=1){toast('Нельзя удалить единственный блок.');return;}if(!confirm('Удалить этот блок из плана?'))return;state.plan.blocks.splice(sheetContext.bi,1);edited();closeSheet();return;}
+ if(a==='move-block'&&sheetContext?.type==='edit'){const i=sheetContext.bi,j=i+Number(b.dataset.dir);if(j<0||j>=state.plan.blocks.length)return;rememberPlanEdit();[state.plan.blocks[i],state.plan.blocks[j]]=[state.plan.blocks[j],state.plan.blocks[i]];edited();closeSheet();toast('Порядок изменён. Проверь, что разминка осталась в начале.');return;}
+ if(a==='delete-block'&&sheetContext?.type==='edit'){if(state.plan.blocks.length<=1){toast('Нельзя удалить единственный блок.');return;}if(!confirm('Удалить этот блок из плана?'))return;rememberPlanEdit();state.plan.blocks.splice(sheetContext.bi,1);edited();closeSheet();return;}
  if(a==='replace'){openReplace(Number(b.dataset.block),Number(b.dataset.entry));return;}
- if(a==='choose-replacement'&&sheetContext?.type==='replace'){const{bi,ei}=sheetContext,ex=EX[b.dataset.ex],old=state.plan.blocks[bi].entries[ei];state.plan.blocks[bi].entries[ei]=entry(ex.id,{mode:ex.mode,value:old.mode===ex.mode?old.value:ex.value});edited();closeSheet();toast('Упражнение заменено, время пересчитано.');return;}
+ if(a==='choose-replacement'&&sheetContext?.type==='replace'){if(replaceEntry(sheetContext.bi,sheetContext.ei,b.dataset.ex))closeSheet();return;}
  if(a==='add-block'){addBlockSheet();return;}
- if(a==='choose-add'){const ex=EX[b.dataset.ex],p=state.plan;const blk=block('added-'+Date.now().toString(36),ex.name,ex.cat==='boxing'?'boxing':ex.cat,[entry(ex.id,ex.cat==='boxing'?{value:180,mode:'time'}:{})],ex.cat==='boxing'?1:2,60,ex.cat==='boxing'?60:20);const i=p.blocks.findIndex(x=>x.kind==='cool');p.blocks.splice(i<0?p.blocks.length:i,0,blk);edited();closeSheet();toast('Блок добавлен перед заминкой.');return;}
+ if(a==='choose-add'&&sheetContext?.type==='add'){if(addManual(b.dataset.ex))closeSheet();return;}
  if(a==='save-plan'){if(!state.plan)return;const name=prompt('Как назвать тренировку?',`${state.plan.title} · ${minutes(duration(state.plan))} мин`);if(!name?.trim())return;state.favorites.unshift({id:'f-'+Date.now().toString(36),name:name.trim().slice(0,90),plan:clone(state.plan)});state.favorites=state.favorites.slice(0,50);persist();toast('Сохранено в разделе «Мои».');return;}
- if(a==='load-favorite'||a==='repeat-history'){const item=(a==='load-favorite'?state.favorites:state.history).find(x=>x.id===b.dataset.id);if(item){state.plan=clone(item.plan);state.config=clone(item.plan.config);persist();view='plan';render();window.scrollTo(0,0);}return;}
+ if(a==='repeat-history'){previewRecommendationUI('repeat-history',b.dataset.id);return;}
+ if(a==='load-favorite'){const item=state.favorites.find(x=>x.id===b.dataset.id);if(item){rememberPlanEdit();state.plan=clone(item.plan);state.config=clone(item.plan.config);persist();view='plan';render();window.scrollTo(0,0);}return;}
  if(a==='delete-favorite'||a==='delete-history'){if(!confirm('Удалить запись?'))return;const k=a==='delete-favorite'?'favorites':'history';state[k]=state[k].filter(x=>x.id!==b.dataset.id);persist();render();return;}
  if(a==='custom-exercise'){customExercise();return;}if(a==='save-custom'){saveCustom();return;}
  if(a==='export'){exportData();return;}if(a==='import'){$('import-file').click();return;}
- if(a==='round-timer'){roundTimerSheet();return;}if(a==='start-rounds'){const n=Number($('round-count').value);await startPlan(makeRounds(n));return;}
- if(a==='start-plan'){await startPlan(state.plan);return;}if(a==='resume-session'){await resumeSession();return;}
+ if(a==='round-timer'){roundTimerSheet();return;}if(a==='start-rounds'){const n=Number($('round-count').value);await startPlanUI(makeRounds(n));return;}
+ if(a==='start-plan'){await startPlanUI(state.plan);return;}if(a==='resume-session'){await resumeSession();return;}
  if(a==='player-main'){if(!state.session)return;if(!state.session.running)await resumeSession();else if(curr().mode==='reps')completeStep();else pauseSession();return;}
  if(a==='leave-player'){pauseSession();$('player').hidden=true;document.body.style.overflow='';render();return;}
  if(a==='player-tech'){const id=curr()?.ex;pauseSession('Техника открыта. После просмотра нажми «Продолжить».');if(id)tech(id);return;}
@@ -488,19 +943,21 @@ document.addEventListener('click',async ev=>{
  if(a==='toggle-mute'){state.sound=!state.sound;if(state.sound){const ok=await audio.unlock();if(!ok){state.sound=false;toast('Звук недоступен.');}}if(state.session?.running)scheduleSounds(false);else audio.cancel();persist();paintPlayer(true);return;}
  if(a==='test-sound'){state.sound=true;persist();if($('sound-setting'))$('sound-setting').checked=true;const ok=await audio.unlock();if(ok){audio.cancel();audio.beep(1,0);audio.tone(940,.11,.23,.4);setTimeout(()=>{if(!state.session?.running)audio.gong();},800);toast('Два сигнала и гонг. Проверь громкость iPhone.');}else toast('Звук не запустился. Открой в Safari / опубликованном приложении.');return;}
  if(a==='rate'){selectedRating=Number(b.dataset.value);pendingSummary.note=$('summary-note').value;document.querySelectorAll('.rating button').forEach(x=>x.classList.toggle('active',Number(x.dataset.value)===selectedRating));return;}
- if(a==='save-summary'){if(pendingSummary){pendingSummary.rpe=selectedRating;pendingSummary.note=$('summary-note').value.slice(0,1000);const h=state.history.find(x=>x.id===pendingSummary.id);if(h)Object.assign(h,pendingSummary);persist();pendingSummary=null;}closeSheet();render();toast('Результат сохранён.');return;}
+ if(a==='save-summary'){saveSummary();return;}
 });
-document.addEventListener('change',ev=>{const t=ev.target;if(t.dataset.must){state.config.must[t.dataset.must]=t.checked;persist();}if(t.id==='sound-setting'){state.sound=t.checked;persist();if(!state.sound)audio.cancel();}if(t.id==='import-file'){importData(t.files[0]);t.value='';}});
+document.addEventListener('change',ev=>{const t=ev.target;if(t.id==='space-clear'){saveProfile({...state.profile,spaceClear:t.checked});return;}if(t.dataset.must){state.config.must[t.dataset.must]=t.checked;persist();updatePreflight();}if(t.id==='sound-setting'){state.sound=t.checked;persist();if(!state.sound)audio.cancel();}if(t.id==='import-file'){importData(t.files[0]);t.value='';}});
 document.addEventListener('input',ev=>{const t=ev.target;if(t.id==='library-search'){libraryQuery=t.value;$('library-results').innerHTML=libraryRows(filteredExercises())||'<div class="empty">Ничего не найдено.</div>';}if(t.id==='volume-setting'){state.volume=Number(t.value);audio.volume();persist();}});
 $('sheet').addEventListener('click',ev=>{if(ev.target===$('sheet')){const r=$('sheet').getBoundingClientRect();if(ev.clientY<r.top||ev.clientX<r.left||ev.clientX>r.right)closeSheet();}});
+document.addEventListener('close',ev=>{if(ev.target===$('sheet'))sheetContext=null;},true);
+document.addEventListener('cancel',ev=>{if(ev.target===$('sheet'))closeSheet();},true);
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&state.session?.running)pauseSession('Экран скрыт или заблокирован. Сессия на паузе.');});
 window.addEventListener('pagehide',()=>{if(state.session)pauseSession('Сессия сохранена на паузе.');});
 $('player').querySelector('[data-action="leave-player"]').innerHTML=icon('back');
-render();
 if(!state.plan){const p=generate(state.config,74012);if(!p.error){state.plan=p;persist();}}
+render();
 if(document.querySelector('link[rel=manifest]')&&'serviceWorker'in navigator&&window.isSecureContext&&location.protocol!=='file:'){
  const path=new URL('./sw.js',location.href);navigator.serviceWorker.register(path,{scope:'./'}).then(()=>{}).catch(()=>{});
 }
 // Small public inspection surface for reproducible browser tests. No secrets or remote calls.
-window.Round={generate,compile,duration,counts,validPlan,EX,DEFAULT_CONFIG,makeRounds,getState:()=>state,audio,render,startPlan,pauseSession,completeStep,skipStep,previousStep,finishSession,enterIndex,tick};
+window.Round={planExplanation,planExplanationHTML,nextRecommendations,previewRecommendation,currentRecommendations,previewRecommendationUI,acceptRecommendation,rejectRecommendation,undoRecommendation,historyDetailsHTML,historyFacts,saveSummary,builderPreflight,preflightHTML,saveProfile,profileSheet,previewPreset,applyPreset,generateUI,manualConflicts,replaceEntry,addManual,planProfileConflicts,startPlanUI,generate,compile,duration,counts,validPlan,EX,DEFAULT_CONFIG,makeRounds,getState:()=>state,audio,render,startPlan,pauseSession,completeStep,skipStep,previousStep,finishSession,enterIndex,tick};
 </script></body></html>
