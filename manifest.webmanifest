@@ -1,8 +1,8 @@
 {
   "id": "/round-training/",
-  "name": "Раунд — бокс × сила",
+  "name": "Раунд: бокс и сила",
   "short_name": "Раунд",
-  "description": "Личный конструктор боксерских и силовых тренировок",
+  "description": "Бокс и силовые тренировки дома",
   "lang": "ru",
   "start_url": "./index.html",
   "scope": "./",
