@@ -1,14 +1,18 @@
-/* Cache only the application shell, never external technique sites or data. */
-const CACHE='round-shell-3.0.1';
-const ASSETS=['./','./index.html','./manifest.webmanifest','./icon-180.png','./icon-192.png','./icon-512.png'];
-self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));});
-self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('round-shell-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
+/* Cache only this application and its reviewed local technique rasters. */
+const CACHE='round-shell-3.1.0';
+const ASSETS=["./","./index.html","./manifest.webmanifest","./icon-180.png","./icon-192.png","./icon-512.png","./technique/box-body-step-1.webp","./technique/box-body-step-2.webp","./technique/box-body-step-3.webp","./technique/box-double-step-1.webp","./technique/box-double-step-2.webp","./technique/box-double-step-3.webp","./technique/box-tempo-step-1.webp","./technique/box-tempo-step-2.webp","./technique/box-tempo-step-3.webp","./technique/bridge-step-1.webp","./technique/bridge-step-2.webp","./technique/bridge-step-3.webp","./technique/calf-raise-step-1.webp","./technique/calf-raise-step-2.webp","./technique/calf-raise-step-3.webp","./technique/crunch-step-1.webp","./technique/crunch-step-2.webp","./technique/crunch-step-3.webp","./technique/db-floor-step-1.webp","./technique/db-floor-step-2.webp","./technique/db-floor-step-3.webp","./technique/db-press-step-1.webp","./technique/db-press-step-2.webp","./technique/db-press-step-3.webp","./technique/db-rdl-step-1.webp","./technique/db-rdl-step-2.webp","./technique/db-rdl-step-3.webp","./technique/db-row-step-1.webp","./technique/db-row-step-2.webp","./technique/db-row-step-3.webp","./technique/goblet-step-1.webp","./technique/goblet-step-2.webp","./technique/goblet-step-3.webp","./technique/incline-pushup-step-1.webp","./technique/incline-pushup-step-2.webp","./technique/incline-pushup-step-3.webp","./technique/kb-deadlift-step-1.webp","./technique/kb-deadlift-step-2.webp","./technique/kb-deadlift-step-3.webp","./technique/knee-plank-step-1.webp","./technique/knee-plank-step-2.webp","./technique/knee-plank-step-3.webp","./technique/plank-step-1.webp","./technique/plank-step-2.webp","./technique/plank-step-3.webp","./technique/pushup-step-1.webp","./technique/pushup-step-2.webp","./technique/pushup-step-3.webp","./technique/pushup-tempo-step-1.webp","./technique/pushup-tempo-step-2.webp","./technique/pushup-tempo-step-3.webp","./technique/rope-basic-step-1.webp","./technique/rope-basic-step-2.webp","./technique/rope-basic-step-3.webp","./technique/rope-boxer-step-1.webp","./technique/rope-boxer-step-2.webp","./technique/rope-boxer-step-3.webp","./technique/squat-step-1.webp","./technique/squat-step-2.webp","./technique/squat-step-3.webp","./technique/wall-pushup-step-1.webp","./technique/wall-pushup-step-2.webp","./technique/wall-pushup-step-3.webp"];
+const ASSET_URLS=new Set(ASSETS.map(path=>new URL(path,self.location.href).href));
+self.addEventListener('install',event=>{
+ event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting()));
+});
+self.addEventListener('activate',event=>{
+ event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('round-shell-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));
+});
 self.addEventListener('fetch',event=>{
  if(event.request.method!=='GET'||new URL(event.request.url).origin!==self.location.origin)return;
  if(event.request.mode==='navigate'){
-  event.respondWith(fetch(event.request).then(response=>{if(response.ok){const copy=response.clone();caches.open(CACHE).then(c=>c.put('./index.html',copy));}return response;}).catch(()=>caches.match('./index.html')));return;
+  event.respondWith(fetch(event.request).then(async response=>{if(response.ok){const cache=await caches.open(CACHE);await cache.put('./index.html',response.clone());}return response;}).catch(async()=>{const cache=await caches.open(CACHE);return cache.match('./index.html');}));return;
  }
- const path=new URL(event.request.url).pathname;
- if(!/\/(?:manifest\.webmanifest|icon-(?:180|192|512)\.png|index\.html)$/.test(path))return;
- event.respondWith(caches.match(event.request).then(hit=>hit||fetch(event.request)));
+ if(!ASSET_URLS.has(event.request.url))return;
+ event.respondWith(caches.open(CACHE).then(async cache=>{const hit=await cache.match(event.request);if(hit)return hit;const response=await fetch(event.request);if(response.ok)await cache.put(event.request,response.clone());return response;}));
 });
